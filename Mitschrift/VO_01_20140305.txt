@@ -1,0 +1,19 @@
+Mobile applications (1. VO, 5.3.2013)
+
+Exam in the first and second week (about XP), mandatory.
+Twiki account (registration to one of three courses needed), account will be created by assistant.
+Everywhing important in the wiki (schedule, ...)
+
+3 modes (all are progressive, real world oriented):
+
+1) Free mode (2-4 members, topic choice free): Free in process.
+2) XP mode (preferred).
+3) Bundle mode (specific topic: "catrobat"): Educational apps for children and teenagers. Free open source project, a lot of different techniques including computer graphics. If interested: Mail to assistant. Big test suites (runs for appr. four hours).
+
+Books: Extreme Programming, Embracing Changes (pdf online, for the exam, 1st version, not 2nd!)
+Follow-up: Test-Driven Development (Kent Beck), madatory for teams doing free mode or bundle mode.
+
+XP: Does not exclude documentation, important part of XP.
+
+Select mode until monday evening (questionare)
+Write down all hours worked.
