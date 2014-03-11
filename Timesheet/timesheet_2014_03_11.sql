@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 11. Mrz 2014 um 22:32
+-- Erstellungszeit: 11. Mrz 2014 um 23:11
 -- Server Version: 5.1.70-log
 -- PHP-Version: 5.5.10-pl0-gentoo
 
@@ -98,6 +98,30 @@ INSERT INTO `entries` (`id`, `user_id`, `courses_tasks_id`, `begin`, `end`, `not
 -- --------------------------------------------------------
 
 --
+-- Stellvertreter-Struktur des Views `hours_all`
+--
+CREATE TABLE IF NOT EXISTS `hours_all` (
+`hours` time
+);
+-- --------------------------------------------------------
+
+--
+-- Stellvertreter-Struktur des Views `hours_plieschn`
+--
+CREATE TABLE IF NOT EXISTS `hours_plieschn` (
+`hours` time
+);
+-- --------------------------------------------------------
+
+--
+-- Stellvertreter-Struktur des Views `hours_plieschn_ma`
+--
+CREATE TABLE IF NOT EXISTS `hours_plieschn_ma` (
+`hours` time
+);
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `tasks`
 --
 
@@ -161,6 +185,33 @@ CREATE TABLE IF NOT EXISTS `users_courses` (
 
 INSERT INTO `users_courses` (`id`, `user_id`, `course_id`) VALUES
 (1, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur des Views `hours_all`
+--
+DROP TABLE IF EXISTS `hours_all`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `hours_all` AS select sec_to_time(sum((unix_timestamp(`entries`.`end`) - unix_timestamp(`entries`.`begin`)))) AS `hours` from `entries`;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur des Views `hours_plieschn`
+--
+DROP TABLE IF EXISTS `hours_plieschn`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `hours_plieschn` AS select sec_to_time(sum((unix_timestamp(`entries`.`end`) - unix_timestamp(`entries`.`begin`)))) AS `hours` from `entries` where (`entries`.`user_id` = 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur des Views `hours_plieschn_ma`
+--
+DROP TABLE IF EXISTS `hours_plieschn_ma`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `hours_plieschn_ma` AS select sec_to_time(sum((unix_timestamp(`entries`.`end`) - unix_timestamp(`entries`.`begin`)))) AS `hours` from ((`entries` join `courses_tasks` on((`entries`.`courses_tasks_id` = `courses_tasks`.`id`))) join `courses` on((`courses_tasks`.`course_id` = `courses`.`id`))) where ((`entries`.`user_id` = 1) and (`courses`.`id` = 1));
 
 --
 -- Constraints der exportierten Tabellen
