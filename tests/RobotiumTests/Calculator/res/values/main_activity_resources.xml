@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <string name="number_one">1</string>
+    <string name="number_two">2</string>
+    <string name="number_three">3</string>
+    <string name="number_four">4</string>
+    <string name="number_five">5</string>
+    <string name="number_six">6</string>
+    <string name="number_seven">7</string>
+    <string name="number_eight">8</string>
+    <string name="number_nine">9</string>
+    <string name="number_zero">0</string>
+    <string name="op_plus">+</string>
+    <string name="op_minus">-</string>
+    <string name="op_mult">*</string>
+    <string name="op_div">/</string>
+    <string name="op_clear">C</string>
+    <string name="op_equal">=</string>
+    <string name="op_comma">,</string>
+</resources>
