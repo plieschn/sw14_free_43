@@ -1,0 +1,9 @@
+Mobile Applications
+2.VO 12.3.2014
+
+No test...
+Android SDK intro
+Unit Testing help project: Robotium
+
+Can emulate clicks
+getText searches for an input field.
