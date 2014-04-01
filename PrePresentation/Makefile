@@ -20,8 +20,8 @@ clean :
 latex : 
 	pdflatex $(NAME).tex
 #	biber $(NAME)
-#	pdflatex $(NAME).tex
-#	pdflatex $(NAME).tex
+	pdflatex $(NAME).tex
+	pdflatex $(NAME).tex
 	cp $(NAME).pdf $(FINAL_NAME).pdf
 
 .PHONY:images
