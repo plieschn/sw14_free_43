@@ -1,0 +1,43 @@
+MILE STONES
+===========
+
+Pre versions
+------------
+
+p1) UI+process mile stone
+  Start/Stop buttons
+  Foreground process
+
+p2) Data Provider mile stone
+  Data Provider
+  
+p3) Data Model mile stone
+  Geodata list
+
+p4) KML mile stoone
+  KML
+
+Remote tools
+------------
+
+r1) Tiny http server
+  Receives POST, sends back OK
+
+Testing versions
+----------------
+
+t1) Transfer mile stone
+  HTTP POST request
+
+Mature versions
+---------------
+
+m1) Settings mile stone
+m2) Simple Statistics mile stone
+
+Optional versions
+-----------------
+
+o1) Overview mile stone
+o2) Height profile mile stone
+o3) Specific time range mile stone
