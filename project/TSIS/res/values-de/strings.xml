@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="stopped">Gestoppt</string>
+    <string name="running">Läuft</string>
+    <string name="state">Status:</string>
+</resources>
