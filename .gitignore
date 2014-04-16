@@ -12,6 +12,7 @@ tmp/
 
 # Java class files
 *.class
+.classpath
 
 # Generated files
 bin/
