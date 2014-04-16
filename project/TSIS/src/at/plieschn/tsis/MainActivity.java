@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ToggleButton;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -43,12 +43,12 @@ public class MainActivity extends ActionBarActivity {
 
     public static class PlaceholderFragment extends Fragment implements OnClickListener {
 
-    	private Button startStopButton;
+    	private ToggleButton startStopButton;
     	
         @Override
 		public void onActivityCreated(Bundle savedInstanceState) {
 			super.onActivityCreated(savedInstanceState);
-    		startStopButton = (Button)getActivity().findViewById(R.id.startStopButton);
+    		startStopButton = (ToggleButton)getActivity().findViewById(R.id.startStopButton);
     		startStopButton.setOnClickListener(this);
 		}
 
@@ -62,6 +62,12 @@ public class MainActivity extends ActionBarActivity {
 		@Override
 		public void onClick(View v) {
 			if(v.getId() == startStopButton.getId()) {
+				ActionBarActivity activity = (ActionBarActivity)getActivity();
+				if(startStopButton.isChecked()) {
+					activity.getSupportActionBar().setIcon(R.drawable.ic_launcher_running);
+				} else {
+					activity.getSupportActionBar().setIcon(R.drawable.ic_launcher);
+				}
 			}
 		}
     }
