@@ -5,3 +5,23 @@ body {
 h1 {
   font-family: "Droid Sans", verdana, arial, sans-serif;
 }
+
+table {
+  border-collapse:collapse;
+}
+
+table, tr, td {
+  border:1px solid black;
+}
+
+table {
+  border:2px solid black;
+}
+
+div {
+  float:left;
+}
+
+div#task_information {
+  margin-left:1em;
+}
