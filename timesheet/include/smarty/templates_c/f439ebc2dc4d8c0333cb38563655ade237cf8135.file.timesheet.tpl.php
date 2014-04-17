@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2014-04-16 18:33:23
+<?php /* Smarty version Smarty-3.1.12, created on 2014-04-17 02:01:40
          compiled from "include/smarty/templates/timesheet.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1806062530534ec75fd9f2d8-81652712%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'f439ebc2dc4d8c0333cb38563655ade237cf8135' => 
     array (
       0 => 'include/smarty/templates/timesheet.tpl',
-      1 => 1397673199,
+      1 => 1397700032,
       2 => 'file',
     ),
   ),
@@ -38,7 +38,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <link rel="stylesheet" type="text/css" href="css/timesheet.css" />
 </head>
 <body>
+<div id="content_area">
 <h1>Timesheet</h1>
+<div id="information">
 <div id="timing_information">
 <?php if (count($_smarty_tpl->tpl_vars['timing_rows']->value)>0){?>
 <table>
@@ -83,6 +85,8 @@ $_smarty_tpl->tpl_vars['task_column']->_loop = true;
 <?php } ?>
 </table>
 <?php }?>
+</div>
+</div>
 </div>
 </body>
 </html>

@@ -7,7 +7,9 @@
 <link rel="stylesheet" type="text/css" href="css/timesheet.css" />
 </head>
 <body>
+<div id="content_area">
 <h1>Timesheet</h1>
+<div id="information">
 <div id="timing_information">
 {if $timing_rows|@count gt 0}
 <table>
@@ -34,6 +36,8 @@
 {/foreach}
 </table>
 {/if}
+</div>
+</div>
 </div>
 </body>
 </html>

@@ -1,25 +1,50 @@
+html {
+}
+
 body {
   font-family: verdana, arial, sans-serif;
 }
 
 h1 {
-  font-family: "Droid Sans", verdana, arial, sans-serif;
+  font-family: verdana, arial, sans-serif;
+  background-color:#333333;
+  color:white;
+  padding:1em;
+}
+
+div#content_area {
+  margin:0 10%;
+  min-height:30em;
+  background-color:#DDDDDD;
+}
+
+div#information {
+  padding:0 2em;
 }
 
 table {
   border-collapse:collapse;
+  font-size:80%;
 }
 
 table, tr, td {
   border:1px solid black;
 }
 
+table tr td {
+  padding: 0 1em;
+}
+
 table {
   border:2px solid black;
 }
 
-div {
-  float:left;
+div#timing_information {
+  display:inline-block;
+}
+
+div#task_information {
+  display:inline-block;
 }
 
 div#task_information {
