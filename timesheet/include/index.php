@@ -49,6 +49,7 @@ function timezone() {
 
 function fillTables(&$timing_rows, &$task_rows, $mysqli) {
   $query = 'select entries.id, entries.begin, entries.end, entries.notes, ';
+  $query .= 'entries.coding_percentage as entry_coding_percentage, ';
   $query .= 'tasks.coding_percentage ';
   $query .= 'from entries ';
   $query .= 'inner join courses_tasks on entries.courses_tasks_id=courses_tasks.id ';
@@ -78,7 +79,7 @@ function fillTables(&$timing_rows, &$task_rows, $mysqli) {
   foreach($expanded_rows as $row) {
     array_push($timing_rows, array($row['begin']->format('d.m.Y'),
 				   $row['begin']->format('H:i:s'),
-				   $row['end']->format('H:i:s')));
+				   twentyFourify($row['end']->format('H:i:s'))));
     array_push($task_rows, array($row['coding_percentage'] * 100,
 				 $row['notes']));
   }
@@ -92,7 +93,10 @@ function convertRows(&$rows) {
     $end = new DateTimeImmutable($row['end']);
     $id = (int)$row['id'];
     $notes = $row['notes'];
-    $percentage = (float)$row['coding_percentage'];
+    if($row['entry_coding_percentage'] !== NULL)
+      $percentage = (float)$row['entry_coding_percentage'];
+    else
+      $percentage = (float)$row['coding_percentage'];
 
     $row['begin'] = $begin;
     $row['end'] = $end;
@@ -246,6 +250,13 @@ function expandRowsOverMidnight($rows) {
   }
 
   return $expanded_rows;
+}
+
+function twentyFourify($timestamp) {
+  if($timestamp == '23:59:59')
+    return '24:00:00';
+  else
+    return $timestamp;
 }
 
 function smarty() {
