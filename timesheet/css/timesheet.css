@@ -18,6 +18,10 @@ div#content_area {
   background-color:#DDDDDD;
 }
 
+div#control {
+  padding:0 2em 1em;
+}
+
 div#information {
   padding:0 2em;
 }
