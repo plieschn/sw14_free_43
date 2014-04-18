@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2014-04-18 04:35:40
+<?php /* Smarty version Smarty-3.1.12, created on 2014-04-18 06:38:09
          compiled from "include/smarty/templates/timesheet.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1806062530534ec75fd9f2d8-81652712%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'f439ebc2dc4d8c0333cb38563655ade237cf8135' => 
     array (
       0 => 'include/smarty/templates/timesheet.tpl',
-      1 => 1397795734,
+      1 => 1397803079,
       2 => 'file',
     ),
   ),
@@ -101,7 +101,7 @@ $_smarty_tpl->tpl_vars['project']->_loop = true;
 	    </tr>
 	    <tr>
 	      <td>
-		<label for="date_to">Date end:</label>
+		<label for="date_end">Date end:</label>
 	      </td>
 	      <td>
 		<input id="date_end" name="date_end" type="date" value="<?php echo $_smarty_tpl->tpl_vars['date_end']->value;?>

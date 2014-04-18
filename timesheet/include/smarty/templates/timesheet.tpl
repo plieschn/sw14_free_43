@@ -48,7 +48,7 @@
 	    </tr>
 	    <tr>
 	      <td>
-		<label for="date_to">Date end:</label>
+		<label for="date_end">Date end:</label>
 	      </td>
 	      <td>
 		<input id="date_end" name="date_end" type="date" value="{$date_end}" />
