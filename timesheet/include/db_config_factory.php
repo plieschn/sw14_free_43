@@ -18,3 +18,4 @@ class DBConfigFactory {
     return NULL;
   }
 }
+?>
