@@ -59,6 +59,7 @@ public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
 		testLocationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 		
 		addTestProvider(PROVIDER_NAME);
+		//addTestProvider(LocationManager.NETWORK_PROVIDER);
 	}
 
 	@Override
@@ -97,7 +98,9 @@ public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
 		solo.clickOnToggleButton(startStopButton.getText().toString());
 
 		solo.sleep(1000);
+		System.out.println("DEBUG: CLICKED");
 		Location locationA = createLocation((float)47.058765,(float)15.459198, 355.112);
+		System.out.println("DEBUG: Send first Location");
 		sendLocation(locationA);
 		
 		solo.sleep(1100);

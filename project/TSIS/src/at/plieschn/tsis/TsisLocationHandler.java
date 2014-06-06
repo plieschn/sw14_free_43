@@ -2,31 +2,49 @@ package at.plieschn.tsis;
 
 import java.util.Vector;
 
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Binder;
+import android.os.IBinder;
 import android.widget.TextView;
 
-public class TsisLocationHandler {
-    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
-    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
+public class TsisLocationHandler extends Service {
+	public interface OnLocationChanged {
+		public void locationChanged();
+	}
 
+	public class TsisLocationBinder extends Binder {
+		TsisLocationHandler getService() {
+			return TsisLocationHandler.this;
+		}
+	}
+	
+    int maxAccuracy;
+    int minimumTimeDifference;
+    int minimumDistanceDifference;
+
+    private final IBinder tsisLocationBinder = new TsisLocationBinder();
+    
 	private Vector<Location> storedLocation;
 	private TsisLocationListener listener;
 	private LocationManager locationManager;
 	
-	private float distance = 0;
+	private static float distance = 0;
 	private double altitude = 0.0;
 	private TextView distanceTextView;
 	private TextView altitudeTextView;
+	private OnLocationChanged caller;
 	
-	public TsisLocationHandler(MainActivity activity) {
-		locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+	/*public TsisLocationHandler(MainActivity activity) {
+//		locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
 		listener = new TsisLocationListener(this);
 		distanceTextView = (TextView) activity.findViewById(R.id.distanceTextView);
 		altitudeTextView = (TextView) activity.findViewById(R.id.altitudeTextView);
 		storedLocation = new Vector<Location>();
-	}
+	}*/
 	
 	public void updateLocation(Location location) {
     	System.out.println("DEBUG: got location");
@@ -44,24 +62,63 @@ public class TsisLocationHandler {
     	System.out.println("DEBUG: longitude " + location.getLongitude());
     	System.out.println("DEBUG: height " + location.getAltitude());
 		
-		distanceTextView.setText(distance + "m");
-		altitudeTextView.setText(altitude + "m");
+    	if(caller != null)
+    		caller.locationChanged();
+		//distanceTextView.setText(distance + "m");
+		//altitudeTextView.setText(altitude + "m");
+    	
+
 	}
 
 	public void startLocationTracking() {
-		
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		listener = new TsisLocationListener(this);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-											   MINIMUM_TIME_BETWEEN_UPDATES,
-											   MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, 
-											   listener);
-		/*locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-											   MINIMUM_TIME_BETWEEN_UPDATES,
-											   MINIMUM_DISTANCE_CHANGE_FOR_UPDATES, 
-											   listener);*/
+				minimumTimeDifference,
+				minimumDistanceDifference, 
+				listener);
+/*		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+				minimumTimeDifference,
+				minimumDistanceDifference, 
+				listener);*/
 	}
 	
 	public void stopLocationTracking() {
 		locationManager.removeUpdates(listener);
-		distanceTextView.setText("");
+		//distanceTextView.setText("");
+	}
+	
+	public void setCaller(OnLocationChanged newCaller) {
+		System.out.println("DEBUG: caller set");
+		caller = newCaller;
+	}
+	
+	public static float getDistance() {
+		return distance;
+	}
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		storedLocation = new Vector<Location>();
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		return tsisLocationBinder;
+	}
+	
+	@Override 
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		maxAccuracy = intent.getExtras().getInt("max_accuracy");
+		minimumTimeDifference = intent.getExtras().getInt("minimum_time_difference");
+		minimumDistanceDifference = intent.getExtras().getInt("minimum_distance_difference");
+    	System.out.println("DEBUG: start Location Tracking");
+		startLocationTracking();
+		return START_STICKY;
+	}
+
+	public void onDestroy() {
+		stopLocationTracking();
 	}
 }
