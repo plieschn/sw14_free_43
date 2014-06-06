@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="upload_interval_title">Upload interval [minutes]</string>
+    <string name="upload_interval_summary">Please enter the update interval in minutes</string>
+    <string name="upload_interval_not_numeric_title">Upload interval not numeric!</string>
+    <string name="max_accuracy_title">Maximum accuracy drift [meters]</string>
+    <string name="max_accuracy_summary">Please enter the maximum accuracy drift in meters</string>
+    <string name="max_accuracy_not_numeric_title">Maximum accuracy drift not numeric!</string>
+    <string name="minimum_time_difference_title">Minimum time difference [seconds]</string>
+    <string name="minimum_time_difference_summary">Please enter the minimum time difference between fixes in seconds</string>
+    <string name="minimum_time_difference_not_numeric_title">Minimum time difference not numeric!</string>
+    <string name="minimum_distance_difference_title">Minimum distance difference [meters]</string>
+    <string name="minimum_distance_difference_summary">Please enter the minimum distance difference between fixes in meters</string>
+    <string name="minimum_distance_difference_not_numeric_title">Minimum distance difference not numeric!</string>
+    <string name="host_title">Host</string>
+    <string name="host_summary">Please enter the URL of your web page</string>
+    <string name="host_not_url_title">Host could not be recognized as an URL (schema: http(s)://www.somehost)!</string>
+    <string name="username_title">Username</string>
+    <string name="username_summary">Please enter the username of your blog software</string>
+    <string name="username_required_title">Username is required!</string>
+    <string name="password_title">Password</string>
+    <string name="password_summary">Please enter the password of your blog software</string>
+    <string name="password_required_title">Password is required!</string>
+    <string name="parent_id_title">Parent id</string>
+    <string name="parent_id_summary">Please enter the id of the post/page you want to attach.</string>
+    <string name="parent_id_not_numeric_title">Parent id not numeric!</string>
+</resources>

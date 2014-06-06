@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <EditTextPreference android:defaultValue="15" android:title="@string/upload_interval_title" android:summary="@string/upload_interval_summary" android:key="upload_interval"/>
+    <EditTextPreference android:key="max_accuracy" android:title="@string/max_accuracy_title" android:summary="@string/max_accuracy_summary" android:defaultValue="30"/>
+    <EditTextPreference android:key="minimum_time_difference" android:title="@string/minimum_time_difference_title" android:summary="@string/minimum_time_difference_summary"/><EditTextPreference android:key="minimum_distance_difference" android:title="@string/minimum_distance_difference_title" android:summary="@string/minimum_distance_difference_summary" android:defaultValue="25"/><EditTextPreference android:key="host" android:title="@string/host_title" android:summary="@string/host_summary"/>
+    <EditTextPreference android:summary="@string/username_summary" android:key="username" android:title="@string/username_title"/>
+    <EditTextPreference android:key="password" android:summary="@string/password_summary" android:title="@string/password_title" android:inputType="textPassword"/>
+    
+    
+</PreferenceScreen>
