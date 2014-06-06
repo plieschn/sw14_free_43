@@ -90,6 +90,7 @@ public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
 		solo.clickOnActionBarItem(at.plieschn.tsis.R.id.action_settings);
 		//solo.clickOnButton(actionSettingsButton.getId());
 		assertEquals("Test", "Test");
+		solo.goBack();
 	}
 	
 	public void testLocationHandling() {
