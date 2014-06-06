@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ToggleButton;
 
 public class MainActivity extends ActionBarActivity {
-
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +44,16 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public static class PlaceholderFragment extends Fragment implements OnClickListener {
-
     	private ToggleButton startStopButton;
+    	private TsisLocationHandler locationHandler;
     	
-        @Override
+    	@Override
 		public void onActivityCreated(Bundle savedInstanceState) {
 			super.onActivityCreated(savedInstanceState);
     		startStopButton = (ToggleButton)getActivity().findViewById(R.id.startStopButton);
     		startStopButton.setOnClickListener(this);
+    		
+    		locationHandler = new TsisLocationHandler((MainActivity)getActivity());
 		}
 
 		@Override
@@ -64,11 +66,13 @@ public class MainActivity extends ActionBarActivity {
 		@Override
 		public void onClick(View v) {
 			if(v.getId() == startStopButton.getId()) {
-				ActionBarActivity activity = (ActionBarActivity)getActivity();
+				MainActivity activity = (MainActivity)getActivity();
 				if(startStopButton.isChecked()) {
 					activity.getSupportActionBar().setIcon(R.drawable.ic_launcher_running);
+					locationHandler.startLocationTracking();
 				} else {
 					activity.getSupportActionBar().setIcon(R.drawable.ic_launcher);
+					locationHandler.stopLocationTracking();
 				}
 			}
 		}
