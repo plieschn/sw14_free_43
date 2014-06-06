@@ -17,7 +17,6 @@ import com.robotium.solo.Solo;
 public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
 	private Solo solo;
 	private Button startStopButton;
-	private Button actionSettingsButton;
 	private TextView distanceTextView;
 	
 	private LocationManager testLocationManager;
@@ -56,7 +55,6 @@ public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
 		super.setUp();
 		solo = new Solo(getInstrumentation(), getActivity());
 		startStopButton = (Button) solo.getView(at.plieschn.tsis.R.id.startStopButton);
-		actionSettingsButton = (Button) solo.getView(at.plieschn.tsis.R.id.action_settings);
 		distanceTextView = (TextView) solo.getView(at.plieschn.tsis.R.id.distanceTextView);
 		testLocationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 		
@@ -89,7 +87,9 @@ public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
 	}
 	
 	public void testPreferences() {
-		solo.clickOnButton(actionSettingsButton.getId());
+		solo.clickOnActionBarItem(at.plieschn.tsis.R.id.action_settings);
+		//solo.clickOnButton(actionSettingsButton.getId());
+		assertEquals("Test", "Test");
 	}
 	
 	public void testLocationHandling() {
