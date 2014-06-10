@@ -1,5 +1,8 @@
 package at.plieschn.tsis;
 
+
+import java.util.Vector;
+
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.BarChart.Type;
@@ -19,12 +22,30 @@ public class Chart {
     private XYSeries currentSeries;
     private XYSeriesRenderer currentRenderer;
 
-    private void addSampleData() {
-        currentSeries.add(1, 2);
-        currentSeries.add(2, 3);
-        currentSeries.add(3, 2);
-        currentSeries.add(4, 5);
-        currentSeries.add(5, 4);
+    private class Point {
+    	public int index;
+    	public long time;
+    	public float distance;
+    	public double altitude;
+    }
+    private Vector<Point> points;
+
+    private void redrawChart() {
+    	currentSeries.clear();
+    	currentSeries.add(0, 0);
+    	Point currentPoint = points.firstElement();
+    	int pointIndex = 1;
+		float y = 0;
+    	for(int x = 1; x < 16; ++x) {
+    		if (currentPoint.index == x) {
+    			y = currentPoint.distance;
+    			if(points.size() > pointIndex)
+    				currentPoint = points.get(pointIndex++);
+    		}
+    		currentSeries.add(x, y);
+    	}
+    	if(chartView != null)
+    		chartView.repaint();
     }
     
     public Chart(String title) {    	
@@ -36,18 +57,62 @@ public class Chart {
         dataset.addSeries(currentSeries);
         currentRenderer = new XYSeriesRenderer();
         renderer.addSeriesRenderer(currentRenderer);
+        
+        points = new Vector<Point>();
     }
     
     public GraphicalView init(Context context) {
-    	if(chartView == null)
-    	{
-    		chartView = ChartFactory.getBarChartView(context, dataset, renderer, Type.DEFAULT);
+    	if(chartView == null) {
+    		chartView = ChartFactory.getLineChartView(context, dataset, renderer);
     	}
         return chartView;
     }
     
-    public void drawChart() {
-        addSampleData();
-        chartView.repaint();
+    public void addData(long time, float distance, double altitude) {
+    	if(points.isEmpty()) {
+    		Point newPoint = new Point();
+    		newPoint.index = 1;
+    		newPoint.time = time;
+    		newPoint.distance = distance;
+    		newPoint.altitude = altitude;
+    		points.add(newPoint);
+    	}
+    	else {
+    		long quartHour = 15*60*1000;
+    		Point firstPoint = points.firstElement();
+    		Point lastPoint = points.lastElement();
+    		long startTime = firstPoint.time;
+    		while(firstPoint != lastPoint && (startTime + quartHour) < time) {
+    			points.remove(0);
+    			firstPoint = points.firstElement();
+    			startTime = firstPoint.time;
+    		}
+    		
+    		if((lastPoint.time + quartHour) < time) {
+    			points.clear();
+        		Point newPoint = new Point();
+        		newPoint.index = 1;
+        		newPoint.time = time;
+        		newPoint.distance = distance;
+        		newPoint.altitude = altitude;
+        		points.add(newPoint);   			
+    		} else {
+    			int index = (int)((time - startTime)/60000) + 1;
+    			if(lastPoint.index == index) {
+    				lastPoint.time = time;
+    				lastPoint.distance = distance;
+    				lastPoint.altitude = altitude;
+    			} else {
+        			points.clear();
+            		Point newPoint = new Point();
+            		newPoint.index = index;
+            		newPoint.time = time;
+            		newPoint.distance = distance;
+            		newPoint.altitude = altitude;
+            		points.add(newPoint);    				
+    			}
+    		}
+    	}
+    	redrawChart();
     }
 }

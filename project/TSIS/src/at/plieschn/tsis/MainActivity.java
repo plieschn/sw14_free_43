@@ -108,6 +108,7 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 				locationService.setCaller(activity);
 				locationService.initChart(activity);
 				FrameLayout layout = (FrameLayout) activity.findViewById(R.id.chart);
+				layout.removeAllViews();
 				layout.addView(locationService.initChart(activity));
 			}
 

@@ -71,7 +71,7 @@ public class TsisLocationHandler extends Service {
 		//distanceTextView.setText(distance + "m");
 		//altitudeTextView.setText(altitude + "m");
     	
-    	chart.drawChart();
+    	chart.addData(location.getTime(), distance, altitude);
 	}
 
 	public void startLocationTracking() {
@@ -121,7 +121,7 @@ public class TsisLocationHandler extends Service {
 		maxAccuracy = intent.getExtras().getInt("max_accuracy");
 		minimumTimeDifference = intent.getExtras().getInt("minimum_time_difference");
 		minimumDistanceDifference = intent.getExtras().getInt("minimum_distance_difference");
-		chart = new Chart("Alitute of the last 15 Minutes"); // FIXXXME
+		chart = new Chart("Distance of the last 15 Minutes"); // FIXXXME
     	System.out.println("DEBUG: start Location Tracking");
 		startLocationTracking();
 		return START_STICKY;
