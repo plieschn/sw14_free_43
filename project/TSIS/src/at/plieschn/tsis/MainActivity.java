@@ -23,7 +23,28 @@ import at.plieschn.tsis.TsisLocationHandler.OnLocationChanged;
 import at.plieschn.tsis.TsisLocationHandler.TsisLocationBinder;
 
 public class MainActivity extends ActionBarActivity implements OnLocationChanged {
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		if(connection != null) {
+			unbindService(connection);
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(binder != null) {
+			if(binder.getService() != null) {
+				startLocationService(false);
+			}
+		}
+
+	}
+
 	private TsisLocationBinder binder;
+	private ServiceConnection connection;
 	
 	protected TsisLocationBinder getBinder() {
 		return binder;
@@ -81,7 +102,7 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 				MainActivity activity = (MainActivity)getActivity();
 				if(startStopButton.isChecked()) {
 					activity.getSupportActionBar().setIcon(R.drawable.ic_launcher_running);
-					activity.startLocationService();
+					activity.startLocationService(true);
 
 				} else {
 					activity.getSupportActionBar().setIcon(R.drawable.ic_launcher);
@@ -91,7 +112,7 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 		}
     }
     
-    public void startLocationService() {
+    public void startLocationService(boolean startService) {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		int max_accuracy = Integer.parseInt(preferences.getString("max_accuracy", "100"));
 		int minimum_time_difference = Integer.parseInt(preferences.getString("minimum_time_difference", "0"));
@@ -102,35 +123,34 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
     	intent.putExtra("minimum_time_difference", minimum_time_difference);
     	intent.putExtra("minimum_distance_difference", minimum_distance_difference);
     	System.out.println("DEBUG: pressed button");
-		startService(intent);
-		ServiceConnection connection = new ServiceConnection() {
-
-			@Override
-			public void onServiceConnected(ComponentName name,
-					IBinder service) {
-				binder = (TsisLocationBinder) service;
-				TsisLocationHandler locationService = binder.getService();
-				MainActivity activity = MainActivity.this;
-				locationService.setCaller(activity);
-				locationService.initChart(activity);
-				FrameLayout layout = (FrameLayout) activity.findViewById(R.id.chart);
-				layout.addView(locationService.initChart(activity));
-			}
-
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
+    	if(startService) {
+			startService(intent);
+			connection = new ServiceConnection() {
+	
+				@Override
+				public void onServiceConnected(ComponentName name,
+						IBinder service) {
+					binder = (TsisLocationBinder) service;
+					TsisLocationHandler locationService = binder.getService();
+					MainActivity activity = MainActivity.this;
+					locationService.setCaller(activity);
+					locationService.initChart(activity);
+					FrameLayout layout = (FrameLayout) activity.findViewById(R.id.chart);
+					layout.addView(locationService.initChart(activity));
+				}
+	
+				@Override
+				public void onServiceDisconnected(ComponentName name) {
+					
+				}
 				
-			}
-			
-		};
+			};
+    	}
+    	
 		bindService(intent, connection, Context.BIND_AUTO_CREATE);
 		
     }
     
-    public void stopLocationService() {
-    	
-    }
-
 	@Override
 	public void locationChanged() {
 		float distance = TsisLocationHandler.getDistance();
