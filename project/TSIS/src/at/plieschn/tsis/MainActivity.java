@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import at.plieschn.tsis.TsisLocationHandler.OnLocationChanged;
@@ -103,7 +104,11 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 					IBinder service) {
 				TsisLocationBinder binder = (TsisLocationBinder) service;
 				TsisLocationHandler locationService = binder.getService();
-				locationService.setCaller(MainActivity.this);
+				MainActivity activity = MainActivity.this;
+				locationService.setCaller(activity);
+				locationService.initChart(activity);
+				FrameLayout layout = (FrameLayout) activity.findViewById(R.id.chart);
+				layout.addView(locationService.initChart(activity));
 			}
 
 			@Override

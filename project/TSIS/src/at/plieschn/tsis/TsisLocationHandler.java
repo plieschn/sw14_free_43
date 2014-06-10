@@ -2,6 +2,8 @@ package at.plieschn.tsis;
 
 import java.util.Vector;
 
+import org.achartengine.GraphicalView;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +33,8 @@ public class TsisLocationHandler extends Service {
 	private Vector<Location> storedLocation;
 	private TsisLocationListener listener;
 	private LocationManager locationManager;
+	
+	private Chart chart;
 	
 	private static float distance = 0;
 	private double altitude = 0.0;
@@ -67,7 +71,7 @@ public class TsisLocationHandler extends Service {
 		//distanceTextView.setText(distance + "m");
 		//altitudeTextView.setText(altitude + "m");
     	
-
+    	chart.drawChart();
 	}
 
 	public void startLocationTracking() {
@@ -77,10 +81,10 @@ public class TsisLocationHandler extends Service {
 				minimumTimeDifference,
 				minimumDistanceDifference, 
 				listener);
-/*		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
 				minimumTimeDifference,
 				minimumDistanceDifference, 
-				listener);*/
+				listener);
 	}
 	
 	public void stopLocationTracking() {
@@ -91,6 +95,10 @@ public class TsisLocationHandler extends Service {
 	public void setCaller(OnLocationChanged newCaller) {
 		System.out.println("DEBUG: caller set");
 		caller = newCaller;
+	}
+	
+	public GraphicalView initChart(Context context) {
+		return chart.init(context);
 	}
 	
 	public static float getDistance() {
@@ -113,6 +121,7 @@ public class TsisLocationHandler extends Service {
 		maxAccuracy = intent.getExtras().getInt("max_accuracy");
 		minimumTimeDifference = intent.getExtras().getInt("minimum_time_difference");
 		minimumDistanceDifference = intent.getExtras().getInt("minimum_distance_difference");
+		chart = new Chart("Alitute of the last 15 Minutes"); // FIXXXME
     	System.out.println("DEBUG: start Location Tracking");
 		startLocationTracking();
 		return START_STICKY;
