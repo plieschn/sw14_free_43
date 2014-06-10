@@ -15,9 +15,9 @@ import com.robotium.solo.Solo;
 
 
 public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
-	private Solo solo;
 	private Button startStopButton;
 	private TextView distanceTextView;
+	private Solo solo;
 	
 	private LocationManager testLocationManager;
 	private static final String PROVIDER_NAME = LocationManager.GPS_PROVIDER;
@@ -85,13 +85,6 @@ public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
 		assertEquals("Is startStopButton activated", true, solo.isToggleButtonChecked(0));
 		solo.clickOnToggleButton(startStopButton.getText().toString());
 		assertEquals("Is startStopButton deactivated", false, solo.isToggleButtonChecked(0));
-	}
-	
-	public void testPreferences() {
-		solo.clickOnActionBarItem(at.plieschn.tsis.R.id.action_settings);
-		//solo.clickOnButton(actionSettingsButton.getId());
-		assertEquals("Test", "Test");
-		solo.goBack();
 	}
 	
 	public void testLocationHandling() {
