@@ -10,4 +10,6 @@
     <string name="statistics">Statistics:</string>
     <string name="distance">Distance </string>
     <string name="altitude">Altitude </string>
+    <string name="service_running_title">TSIS is running!</string>
+    <string name="service_running_text">TSIS service is still running. Use the application to stop it.</string>
 </resources>

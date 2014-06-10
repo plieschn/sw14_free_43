@@ -4,6 +4,8 @@ import java.util.Vector;
 
 import org.achartengine.GraphicalView;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +13,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.widget.TextView;
 
 public class TsisLocationHandler extends Service {
@@ -28,6 +33,7 @@ public class TsisLocationHandler extends Service {
     int minimumTimeDifference;
     int minimumDistanceDifference;
 
+	private final int SERVICE_RUNNING_NOTIFICATION_ID = 0x01;
     private final IBinder tsisLocationBinder = new TsisLocationBinder();
     
 	private Vector<Location> storedLocation;
@@ -108,6 +114,7 @@ public class TsisLocationHandler extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		Log.d("Service", "onCreate");
 		storedLocation = new Vector<Location>();
 	}
 
@@ -118,12 +125,30 @@ public class TsisLocationHandler extends Service {
 	
 	@Override 
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		super.onStartCommand(intent, flags, startId);
 		maxAccuracy = intent.getExtras().getInt("max_accuracy");
 		minimumTimeDifference = intent.getExtras().getInt("minimum_time_difference");
 		minimumDistanceDifference = intent.getExtras().getInt("minimum_distance_difference");
 		chart = new Chart("Alitute of the last 15 Minutes"); // FIXXXME
     	System.out.println("DEBUG: start Location Tracking");
 		startLocationTracking();
+		
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+		.setSmallIcon(R.drawable.ic_launcher)
+		.setContentTitle(getString(R.string.service_running_title))
+		.setContentText(getString(R.string.service_running_text));
+	
+		Intent result_intent = new Intent(this, MainActivity.class);
+		TaskStackBuilder stack_builder = TaskStackBuilder.create(this);
+		stack_builder.addNextIntent(result_intent);
+		PendingIntent result_pending_intent =
+				stack_builder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+	
+		builder.setContentIntent(result_pending_intent);
+		Notification notification = builder.build();
+
+		startForeground(SERVICE_RUNNING_NOTIFICATION_ID, notification);
+		
 		return START_STICKY;
 	}
 

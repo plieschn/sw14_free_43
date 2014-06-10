@@ -120,6 +120,10 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 		bindService(intent, connection, Context.BIND_AUTO_CREATE);
 		
     }
+    
+    public void stopLocationService() {
+    	
+    }
 
 	@Override
 	public void locationChanged() {
