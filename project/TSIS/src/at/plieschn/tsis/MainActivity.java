@@ -23,6 +23,12 @@ import at.plieschn.tsis.TsisLocationHandler.OnLocationChanged;
 import at.plieschn.tsis.TsisLocationHandler.TsisLocationBinder;
 
 public class MainActivity extends ActionBarActivity implements OnLocationChanged {
+	private TsisLocationBinder binder;
+	
+	protected TsisLocationBinder getBinder() {
+		return binder;
+	}
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +85,7 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 
 				} else {
 					activity.getSupportActionBar().setIcon(R.drawable.ic_launcher);
-					getActivity().stopService(new Intent(getActivity(), TsisLocationHandler.class));
+					((MainActivity)getActivity()).getBinder().getService().requestStop();
 				}
 			}
 		}
@@ -102,7 +108,7 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 			@Override
 			public void onServiceConnected(ComponentName name,
 					IBinder service) {
-				TsisLocationBinder binder = (TsisLocationBinder) service;
+				binder = (TsisLocationBinder) service;
 				TsisLocationHandler locationService = binder.getService();
 				MainActivity activity = MainActivity.this;
 				locationService.setCaller(activity);

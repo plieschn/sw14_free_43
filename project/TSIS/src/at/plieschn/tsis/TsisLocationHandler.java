@@ -154,5 +154,12 @@ public class TsisLocationHandler extends Service {
 
 	public void onDestroy() {
 		stopLocationTracking();
+		stopForeground(true);
+	}
+	
+	public void requestStop() {
+		stopLocationTracking();
+		stopForeground(true);
+		stopSelf();
 	}
 }
