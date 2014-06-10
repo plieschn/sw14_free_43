@@ -137,6 +137,9 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 		System.out.println("DEBUG: distance " + distance);
 		
 		TextView distanceTextView = (TextView) findViewById(R.id.distanceTextView);
-		distanceTextView.setText(distance + "m");
+		
+		if(distanceTextView != null) {
+			distanceTextView.setText(distance + "m");
+		}
 	}
 }
