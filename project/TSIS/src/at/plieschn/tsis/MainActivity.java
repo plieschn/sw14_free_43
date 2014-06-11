@@ -23,24 +23,61 @@ import at.plieschn.tsis.TsisLocationHandler.OnLocationChanged;
 import at.plieschn.tsis.TsisLocationHandler.TsisLocationBinder;
 
 public class MainActivity extends ActionBarActivity implements OnLocationChanged {
+	private class TsisServiceConnection implements ServiceConnection {
+		@Override
+		public void onServiceConnected(ComponentName name,
+				IBinder service) {
+			binder = (TsisLocationBinder) service;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			
+		}
+	}
+
+	private class TsisServiceConnectionUI implements ServiceConnection {
+		@Override
+		public void onServiceConnected(ComponentName name,
+				IBinder service) {
+			binder = (TsisLocationBinder) service;
+			TsisLocationHandler locationService = binder.getService();
+			MainActivity activity = MainActivity.this;
+			locationService.setCaller(activity);
+			locationService.initChart(activity);
+			FrameLayout layout = (FrameLayout) activity.findViewById(R.id.chart);
+			layout.addView(locationService.initChart(activity));
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			
+		}
+	}
+
+	
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
-		if(connection != null) {
+		if(binder != null) {
 			unbindService(connection);
+			TsisLocationHandler.setSystemBinder(binder);
 		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		binder = TsisLocationHandler.getSystemBinder();
+		
 		if(binder != null) {
 			if(binder.getService() != null) {
+				ToggleButton startStopButton = (ToggleButton) findViewById(R.id.startStopButton);
+				startStopButton.setChecked(true);
+				getSupportActionBar().setIcon(R.drawable.ic_launcher_running);
 				startLocationService(false);
 			}
 		}
-
 	}
 
 	private TsisLocationBinder binder;
@@ -123,32 +160,15 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
     	intent.putExtra("minimum_time_difference", minimum_time_difference);
     	intent.putExtra("minimum_distance_difference", minimum_distance_difference);
     	System.out.println("DEBUG: pressed button");
+
     	if(startService) {
 			startService(intent);
-			connection = new ServiceConnection() {
-	
-				@Override
-				public void onServiceConnected(ComponentName name,
-						IBinder service) {
-					binder = (TsisLocationBinder) service;
-					TsisLocationHandler locationService = binder.getService();
-					MainActivity activity = MainActivity.this;
-					locationService.setCaller(activity);
-					locationService.initChart(activity);
-					FrameLayout layout = (FrameLayout) activity.findViewById(R.id.chart);
-					layout.addView(locationService.initChart(activity));
-				}
-	
-				@Override
-				public void onServiceDisconnected(ComponentName name) {
-					
-				}
-				
-			};
+	    	connection = new TsisServiceConnectionUI();			
+    	} else {
+    		connection = new TsisServiceConnection();
     	}
-    	
+
 		bindService(intent, connection, Context.BIND_AUTO_CREATE);
-		
     }
     
 	@Override

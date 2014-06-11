@@ -47,6 +47,7 @@ public class TsisLocationHandler extends Service {
 	private TextView distanceTextView;
 	private TextView altitudeTextView;
 	private OnLocationChanged caller;
+	private static TsisLocationBinder systemBinder;
 	
 	/*public TsisLocationHandler(MainActivity activity) {
 //		locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
@@ -55,6 +56,14 @@ public class TsisLocationHandler extends Service {
 		altitudeTextView = (TextView) activity.findViewById(R.id.altitudeTextView);
 		storedLocation = new Vector<Location>();
 	}*/
+	
+	public static TsisLocationBinder getSystemBinder() {
+		return systemBinder;
+	}
+	
+	public static void setSystemBinder(TsisLocationBinder systemBinder) {
+		TsisLocationHandler.systemBinder = systemBinder;
+	}
 	
 	public void updateLocation(Location location) {
     	System.out.println("DEBUG: got location");
