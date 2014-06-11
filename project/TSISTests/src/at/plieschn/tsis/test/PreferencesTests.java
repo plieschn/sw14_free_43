@@ -71,19 +71,19 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 	
 	
 	public void testInterval() {
-		int line = 1;
+		String title = "Upload interval";
 		solo.clickOnActionBarItem(at.plieschn.tsis.R.id.action_settings);
 		
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "15");
 		solo.clickOnButton("OK");
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("15"));
 		solo.goBack();
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "15asd");
 		solo.clickOnButton("OK");
@@ -94,7 +94,7 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 			fail("15asd is not a valid number!");
 		}
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("15"));
 		solo.goBack();
 
@@ -102,19 +102,19 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 	}
 
 	public void testMaxAccuracy() {
-		int line = 2;
+		String title = "Maximum accuracy drift";
 		solo.clickOnActionBarItem(at.plieschn.tsis.R.id.action_settings);
 		
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "30");
 		solo.clickOnButton("OK");
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("30"));
 		solo.goBack();
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "30sdf");
 		solo.clickOnButton("OK");
@@ -125,7 +125,7 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 			fail("30sdf is not a valid number!");
 		}
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("30"));
 		solo.goBack();
 
@@ -133,19 +133,19 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	
 	public void testMinimumTimeDifference() {
-		int line = 3;
+		String title = "Minimum time difference";
 		solo.clickOnActionBarItem(at.plieschn.tsis.R.id.action_settings);
 		
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "50");
 		solo.clickOnButton("OK");
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("50"));
 		solo.goBack();
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "blubb60");
 		solo.clickOnButton("OK");
@@ -156,11 +156,11 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 			fail("blubb60 is not a valid number!");
 		}
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("50"));
 		solo.goBack();
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "0");
 		solo.clickOnButton("OK");
@@ -169,19 +169,19 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 	}
 
 	public void testMinimumDistanceDifference() {
-		int line = 4;
+		String title = "Minimum distance difference";
 		solo.clickOnActionBarItem(at.plieschn.tsis.R.id.action_settings);
 		
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "25");
 		solo.clickOnButton("OK");
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("25"));
 		solo.goBack();
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "dfg60");
 		solo.clickOnButton("OK");
@@ -192,7 +192,7 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 			fail("dfg60 is not a valid number!");
 		}
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("25"));
 		solo.goBack();
 
@@ -200,19 +200,19 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	
 	public void testHost() {
-		int line = 5;
+		String title = "Host";
 		solo.clickOnActionBarItem(at.plieschn.tsis.R.id.action_settings);
 		
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "http://tsis.plieschn.at");
 		solo.clickOnButton("OK");
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("http://tsis.plieschn.at"));
 		solo.goBack();
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "tsis.plieschn.at");
 		solo.clickOnButton("OK");
@@ -223,7 +223,7 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 			fail("tsis.plieschn.at is not a valid URL!");
 		}
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("http://tsis.plieschn.at"));
 		solo.goBack();
 
@@ -231,19 +231,19 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	
 	public void testUsername() {
-		int line = 6;
+		String title = "Username";
 		solo.clickOnActionBarItem(at.plieschn.tsis.R.id.action_settings);
 		
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "username");
 		solo.clickOnButton("OK");
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("username"));
 		solo.goBack();
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "");
 		solo.clickOnButton("OK");
@@ -254,7 +254,7 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 			fail("username is empty!");
 		}
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("username"));
 		solo.goBack();
 
@@ -262,19 +262,19 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 	}
 	
 	public void testPassword() {
-		int line = 7;
+		String title = "Password";
 		solo.clickOnActionBarItem(at.plieschn.tsis.R.id.action_settings);
 		
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "password");
 		solo.clickOnButton("OK");
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("password"));
 		solo.goBack();
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		solo.clearEditText(0);
 		solo.enterText(0, "");
 		solo.clickOnButton("OK");
@@ -285,7 +285,7 @@ public class PreferencesTests extends ActivityInstrumentationTestCase2<MainActiv
 			fail("password is empty!");
 		}
 
-		solo.clickInList(line, 0);
+		solo.clickOnText(title);
 		assertTrue(solo.searchText("password"));
 		solo.goBack();
 
