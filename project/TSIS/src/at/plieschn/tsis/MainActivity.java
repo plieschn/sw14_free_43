@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-			
+			binder = null;
 		}
 	}
 
@@ -51,7 +51,7 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-			
+			binder = null;
 		}
 	}
 
@@ -149,6 +149,7 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 					activity.getSupportActionBar().setIcon(R.drawable.ic_launcher);
 					((MainActivity)getActivity()).getBinder().getService().requestStop();
 					((MainActivity)getActivity()).setBinder(null);
+					activity.stopLocationService();
 				}
 			}
 		}
@@ -174,6 +175,10 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
     	}
 
 		bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+    
+    public void stopLocationService() {
+    	unbindService(connection);
     }
     
 	@Override

@@ -103,8 +103,12 @@ public class TsisLocationHandler extends Service {
 	}
 	
 	public void stopLocationTracking() {
-		locationManager.removeUpdates(listener);
-		//distanceTextView.setText("");
+		if(locationManager != null) {
+			if(listener != null) {
+				locationManager.removeUpdates(listener);
+				//distanceTextView.setText("");
+			}
+		}
 	}
 	
 	public void setCaller(OnLocationChanged newCaller) {
