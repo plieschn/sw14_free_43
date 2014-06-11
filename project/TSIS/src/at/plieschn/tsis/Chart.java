@@ -1,11 +1,13 @@
 package at.plieschn.tsis;
 
 
+import java.text.DecimalFormat;
 import java.util.Vector;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
-import org.achartengine.chart.BarChart.Type;
+import org.achartengine.chart.BarChart;
+import org.achartengine.chart.LineChart;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
@@ -18,63 +20,115 @@ public class Chart {
     private GraphicalView chartView;
 
     private XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-    private XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
-    private XYSeries currentSeries;
-    private XYSeriesRenderer currentRenderer;
+    private XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer(2);
+    private XYSeries distanceSeries;
+    private XYSeries altitudeSeries;
+    private XYSeries heightSeries;
+    private XYSeriesRenderer distanceRenderer;
+    private XYSeriesRenderer altitudeRenderer;
+    private XYSeriesRenderer heightRenderer;
+    
+    private String[] types;
 
     private class Point {
     	public int index;
     	public long time;
     	public float distance;
     	public double altitude;
+    	public double height;
     }
     private Vector<Point> points;
 
     private void redrawChart() {
-    	currentSeries.clear();
-    	currentSeries.add(0, 0);
+    	distanceSeries.clear();
+    	distanceSeries.add(0, 0);
+    	altitudeSeries.clear();
+    	altitudeSeries.add(0, 0);
+    	heightSeries.clear();
     	Point currentPoint = points.firstElement();
     	int pointIndex = 1;
-		float y = 0;
+		float distance = 0;
+		double altitude = 0;
+		double height = 0;
+		double maxHeight = 0;
+
     	for(int x = 1; x < 16; ++x) {
     		if (currentPoint.index == x) {
-    			y = currentPoint.distance;
+    			distance = currentPoint.distance;
+    			altitude = currentPoint.altitude;
+    			height = currentPoint.height;
     			if(points.size() > pointIndex)
     				currentPoint = points.get(pointIndex++);
+    			else
+    				break;
     		}
-    		currentSeries.add(x, y);
+    		distanceSeries.add(x, distance);
+    		altitudeSeries.add(x, altitude);
+    		heightSeries.add(x, height);
+    		
+    		maxHeight = Math.max(maxHeight, height);
     	}
+    	
+    	renderer.setYAxisMin(0,1);
+    	renderer.setYAxisMax(heightSeries.getMaxY(), 1);
+    	
     	if(chartView != null)
     		chartView.repaint();
     }
     
-    public Chart(String title) {    	
+    public Chart() {    	
         renderer.setApplyBackgroundColor(true);
         renderer.setMarginsColor(Color.argb(0x00, 0x01, 0x01, 0x01));
         renderer.setBackgroundColor(Color.TRANSPARENT);
         
-        currentSeries = new XYSeries(title);
-        dataset.addSeries(currentSeries);
-        currentRenderer = new XYSeriesRenderer();
-        renderer.addSeriesRenderer(currentRenderer);
+        distanceSeries = new XYSeries("Distance of the last 15 Minutes", 0); // FIXXXME
+        altitudeSeries = new XYSeries("Alitude of the last 15 Minutes", 0);
+        heightSeries = new XYSeries("Height of the last 15 Minutes", 1);
+        dataset.addSeries(heightSeries);        
+        dataset.addSeries(distanceSeries);
+        dataset.addSeries(altitudeSeries);
+        distanceRenderer = new XYSeriesRenderer();
+        distanceRenderer.setChartValuesFormat(new DecimalFormat("#.##"));
+        distanceRenderer.setDisplayChartValues(true);
+        
+        altitudeRenderer = new XYSeriesRenderer();
+        altitudeRenderer.setColor(Color.GREEN);
+        altitudeRenderer.setChartValuesFormat(new DecimalFormat("#.##"));
+        altitudeRenderer.setDisplayChartValues(true);
+        heightRenderer = new XYSeriesRenderer();
+        heightRenderer.setColor(Color.CYAN);
+        heightRenderer.setChartValuesFormat(new DecimalFormat("#.##"));
+        heightRenderer.setDisplayChartValues(true);
+        
+        renderer.addSeriesRenderer(heightRenderer);
+        renderer.addSeriesRenderer(distanceRenderer);
+        renderer.addSeriesRenderer(altitudeRenderer);
+        renderer.setXAxisMin(0.0);
+        renderer.setXAxisMax(15.0);
+        renderer.setXAxisMin(0.0, 1);
+        renderer.setXAxisMax(15.0, 1);
+                
+        types = new String[] {BarChart.TYPE, LineChart.TYPE, LineChart.TYPE};
         
         points = new Vector<Point>();
     }
     
     public GraphicalView init(Context context) {
     	if(chartView == null) {
-    		chartView = ChartFactory.getLineChartView(context, dataset, renderer);
+    		chartView = ChartFactory.getCombinedXYChartView(context, dataset, renderer, types);
+//            mChart = (GraphicalView) ChartFactory.getCombinedXYChartView(getBaseContext(), dataset, multiRenderer, types);
     	}
         return chartView;
     }
     
-    public void addData(long time, float distance, double altitude) {
+    public void addData(long time, float distance, double altitude, double height) {
     	if(points.isEmpty()) {
     		Point newPoint = new Point();
     		newPoint.index = 1;
     		newPoint.time = time;
     		newPoint.distance = distance;
     		newPoint.altitude = altitude;
+    		newPoint.height = height;
     		points.add(newPoint);
     	}
     	else {
@@ -83,7 +137,7 @@ public class Chart {
     		Point lastPoint = points.lastElement();
     		long startTime = firstPoint.time;
     		while(firstPoint != lastPoint && (startTime + quartHour) < time) {
-    			points.remove(0);
+    			points.remove(firstPoint);
     			firstPoint = points.firstElement();
     			startTime = firstPoint.time;
     		}
@@ -95,23 +149,28 @@ public class Chart {
         		newPoint.time = time;
         		newPoint.distance = distance;
         		newPoint.altitude = altitude;
+        		newPoint.height = height;
         		points.add(newPoint);   			
     		} else {
     			int index = (int)((time - startTime)/60000) + 1;
     			if(lastPoint.index == index) {
-    				lastPoint.time = time;
+    				//lastPoint.time = time;
     				lastPoint.distance = distance;
     				lastPoint.altitude = altitude;
+    				lastPoint.height = height;
     			} else {
-        			points.clear();
             		Point newPoint = new Point();
             		newPoint.index = index;
             		newPoint.time = time;
             		newPoint.distance = distance;
             		newPoint.altitude = altitude;
+            		newPoint.height = height;
             		points.add(newPoint);    				
     			}
     		}
+    	}
+    	for (int i = 0; i < points.size(); ++i) {
+    		points.get(i).index = i+1;
     	}
     	redrawChart();
     }
