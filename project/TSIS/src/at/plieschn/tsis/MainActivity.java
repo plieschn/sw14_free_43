@@ -86,6 +86,10 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 	protected TsisLocationBinder getBinder() {
 		return binder;
 	}
+
+	protected void setBinder(TsisLocationBinder binder) {
+		this.binder = binder;
+	}
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +148,7 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 				} else {
 					activity.getSupportActionBar().setIcon(R.drawable.ic_launcher);
 					((MainActivity)getActivity()).getBinder().getService().requestStop();
+					((MainActivity)getActivity()).setBinder(null);
 				}
 			}
 		}
