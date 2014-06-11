@@ -2,7 +2,7 @@
 <resources>
     <string name="upload_interval_title">Upload-Intervall [Minuten]</string>
     <string name="upload_interval_summary">Diese Einstellung gibt die Zeitspannt an, die zwischen zwei Hochlade-Versuchen von TSIS verstreichen muss, in Metern.</string>
-    <string name="upload_interval_not_numeric_title">Der upload-Intervall nicht numerisch!</string>
+    <string name="upload_interval_not_numeric_title">Der Upload-Intervall nicht numerisch!</string>
     <string name="max_accuracy_title">Maximale Genauigkeitsabweichung [Metern]</string>
     <string name="max_accuracy_summary">Sie können mithilfe dieser Einstellung die maximale Abweichung der Messpunkte einschränken. Bitte beachten Sie, dass ein zu niedriger Wert höchstwahrscheinlich in zu wenigen Messpunkten resultieren wird. Dieser Wert wird in Metern angegeben.</string>
     <string name="max_accuracy_not_numeric_title">Die maximale Genauigkeitsabweichung nicht numerisch!</string>
