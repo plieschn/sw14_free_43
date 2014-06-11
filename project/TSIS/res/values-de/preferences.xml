@@ -5,7 +5,7 @@
     <string name="upload_interval_not_numeric_title">Der Upload-Intervall nicht numerisch!</string>
     <string name="max_accuracy_title">Maximale Genauigkeitsabweichung [Metern]</string>
     <string name="max_accuracy_summary">Sie können mithilfe dieser Einstellung die maximale Abweichung der Messpunkte einschränken. Bitte beachten Sie, dass ein zu niedriger Wert höchstwahrscheinlich in zu wenigen Messpunkten resultieren wird. Dieser Wert wird in Metern angegeben.</string>
-    <string name="max_accuracy_not_numeric_title">Die maximale Genauigkeitsabweichung nicht numerisch!</string>
+    <string name="max_accuracy_not_numeric_title">Die maximale Genauigkeitsabweichung ist nicht numerisch!</string>
     <string name="minimum_time_difference_title">Minimale Zeitdifferenz [Sekunden]</string>
     <string name="minimum_time_difference_summary">Diese Einstellung bestimmt die minimale Zeitdauer, die zwischen dem Erfassen von zwei Messpunkten vergehen muss in Sekunden.</string>
     <string name="minimum_time_difference_not_numeric_title">Die maximale Genauigkeitsabweichung ist nicht numerisch!</string>
