@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="upload_interval_title">Upload-Intervall [Minuten]</string>
+    <string name="upload_interval_summary">Diese Einstellung gibt die Zeitspannt an, die zwischen zwei Hochlade-Versuchen von TSIS verstreichen muss, in Metern.</string>
+    <string name="upload_interval_not_numeric_title">Der upload-Intervall nicht numerisch!</string>
+    <string name="max_accuracy_title">Maximale Genauigkeitsabweichung [Metern]</string>
+    <string name="max_accuracy_summary">Sie können mithilfe dieser Einstellung die maximale Abweichung der Messpunkte einschränken. Bitte beachten Sie, dass ein zu niedriger Wert höchstwahrscheinlich in zu wenigen Messpunkten resultieren wird. Dieser Wert wird in Metern angegeben.</string>
+    <string name="max_accuracy_not_numeric_title">Die maximale Genauigkeitsabweichung nicht numerisch!</string>
+    <string name="minimum_time_difference_title">Minimale Zeitdifferenz [Sekunden]</string>
+    <string name="minimum_time_difference_summary">Diese Einstellung bestimmt die minimale Zeitdauer, die zwischen dem Erfassen von zwei Messpunkten vergehen muss in Sekunden.</string>
+    <string name="minimum_time_difference_not_numeric_title">Die maximale Genauigkeitsabweichung ist nicht numerisch!</string>
+    <string name="minimum_distance_difference_title">Minimale Distanzdifferenz [Metern]</string>
+    <string name="minimum_distance_difference_summary">Entsprechend der vorherigen Einstellung ist dies die minimale Distanz in Metern, die zwischen zwei Messpunkten überschritten werden muss, damit der zweite Messpunkt erfasst wird.</string>
+    <string name="minimum_distance_difference_not_numeric_title">Die minimale Distanzdifferenz ist nicht numerisch!</string>
+    <string name="host_title">TSIS Host</string>
+    <string name="host_summary">Bitte geben Sie die Adresse Ihres TSIS server an.</string>
+    <string name="host_not_url_title">Der TSIS Host konnte nicht als gültige URL erkannt werden (Schema: http(s)://www.adresse)!</string>
+    <string name="username_title">TSIS Username</string>
+    <string name="username_summary">Bitte geben Sie Ihren TSIS Benutzernamen hier ein.</string>
+    <string name="username_required_title">Der TSIS Benutzername is verpflichtend!</string>
+    <string name="password_title">TSIS Passwort</string>
+    <string name="password_summary">Bitte geben Sie Ihr TSIS Passwort hier ein.</string>
+    <string name="password_required_title">Das TSIS Passwort is verpflichtend!</string>
+</resources>
