@@ -46,44 +46,42 @@ public class Chart {
     	altitudeSeries.add(0, 0);
     	heightSeries.clear();
     	Point currentPoint = points.firstElement();
-    	int pointIndex = 1;
+    	int pointIndex = 0;
 		float distance = 0;
 		double altitude = 0;
 		double height = 0;
-		double maxHeight = 0;
 
     	for(int x = 1; x < 16; ++x) {
-    		if (currentPoint.index == x) {
+        	if (points.size() <= pointIndex) {
+        		break;
+        	}
+        	currentPoint = points.get(pointIndex);
+        	if (currentPoint.index == x) {
     			distance = currentPoint.distance;
     			altitude = currentPoint.altitude;
     			height = currentPoint.height;
-    			if(points.size() > pointIndex)
-    				currentPoint = points.get(pointIndex++);
-    			else
-    				break;
+    			++pointIndex;
     		}
+        	
     		distanceSeries.add(x, distance);
     		altitudeSeries.add(x, altitude);
     		heightSeries.add(x, height);
-    		
-    		maxHeight = Math.max(maxHeight, height);
     	}
     	
     	renderer.setYAxisMin(0,1);
     	renderer.setYAxisMax(heightSeries.getMaxY(), 1);
-    	
     	if(chartView != null)
     		chartView.repaint();
     }
     
-    public Chart() {    	
+    public Chart(String distanceTitle, String altitudeTitle, String heightTitle) {
         renderer.setApplyBackgroundColor(true);
         renderer.setMarginsColor(Color.argb(0x00, 0x01, 0x01, 0x01));
         renderer.setBackgroundColor(Color.TRANSPARENT);
         
-        distanceSeries = new XYSeries("Distance of the last 15 Minutes", 0); // FIXXXME
-        altitudeSeries = new XYSeries("Alitude of the last 15 Minutes", 0);
-        heightSeries = new XYSeries("Height of the last 15 Minutes", 1);
+        distanceSeries = new XYSeries(distanceTitle, 0);
+        altitudeSeries = new XYSeries(altitudeTitle, 0);
+        heightSeries = new XYSeries(heightTitle, 1);
         dataset.addSeries(heightSeries);        
         dataset.addSeries(distanceSeries);
         dataset.addSeries(altitudeSeries);
@@ -116,7 +114,6 @@ public class Chart {
     public GraphicalView init(Context context) {
     	if(chartView == null) {
     		chartView = ChartFactory.getCombinedXYChartView(context, dataset, renderer, types);
-//            mChart = (GraphicalView) ChartFactory.getCombinedXYChartView(getBaseContext(), dataset, multiRenderer, types);
     	}
         return chartView;
     }
@@ -154,7 +151,6 @@ public class Chart {
     		} else {
     			int index = (int)((time - startTime)/60000) + 1;
     			if(lastPoint.index == index) {
-    				//lastPoint.time = time;
     				lastPoint.distance = distance;
     				lastPoint.altitude = altitude;
     				lastPoint.height = height;

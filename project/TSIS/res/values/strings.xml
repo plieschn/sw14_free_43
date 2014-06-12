@@ -12,4 +12,7 @@
     <string name="altitude">Altitude </string>
     <string name="service_running_title">TSIS is running!</string>
     <string name="service_running_text">TSIS service is still running. Use the application to stop it.</string>
+    <string name="distance_fifteen_min">Distance of the last 15 Minutes</string>
+    <string name="altitude_fifteen_min">Alitude of the last 15 Minutes</string>
+    <string name="height_fifteen_min">Height of the last 15 Minutes</string>
 </resources>
