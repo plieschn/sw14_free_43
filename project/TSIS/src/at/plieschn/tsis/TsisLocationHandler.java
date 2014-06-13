@@ -1,6 +1,9 @@
 package at.plieschn.tsis;
 
 import java.util.Vector;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.achartengine.GraphicalView;
 
@@ -9,10 +12,12 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -28,9 +33,13 @@ public class TsisLocationHandler extends Service {
 		}
 	}
 	
+	int uploadInterval;
     int maxAccuracy;
     int minimumTimeDifference;
     int minimumDistanceDifference;
+    String host;
+    String username;
+    String password;
 
 	private final int SERVICE_RUNNING_NOTIFICATION_ID = 0x01;
     private final IBinder tsisLocationBinder = new TsisLocationBinder();
@@ -38,6 +47,7 @@ public class TsisLocationHandler extends Service {
 	private Vector<Location> storedLocation;
 	private TsisLocationListener listener;
 	private LocationManager locationManager;
+	private ScheduledExecutorService executorService;
 	
 	private Chart chart;
 	
@@ -56,6 +66,10 @@ public class TsisLocationHandler extends Service {
 	
 	public static TsisLocationBinder getSystemBinder() {
 		return systemBinder;
+	}
+	
+	public Vector<Location> getStoredLocation() {
+		return storedLocation;
 	}
 	
 	public static void setSystemBinder(TsisLocationBinder systemBinder) {
@@ -157,6 +171,8 @@ public class TsisLocationHandler extends Service {
 		Notification notification = builder.build();
 
 		startForeground(SERVICE_RUNNING_NOTIFICATION_ID, notification);
+		executorService = Executors.newScheduledThreadPool(1);
+		executorService.scheduleAtFixedRate(new TsisSynchronizer(this, host, username, password), 0, uploadInterval, TimeUnit.MINUTES);
 		
 		return START_STICKY;
 	}
@@ -169,6 +185,18 @@ public class TsisLocationHandler extends Service {
 	public void requestStop() {
 		stopLocationTracking();
 		stopForeground(true);
+		executorService.shutdown();
 		stopSelf();
+	}
+	
+	private void updatePreferences() {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		uploadInterval = Integer.parseInt(preferences.getString("upload_interval", "15"));
+		maxAccuracy = Integer.parseInt(preferences.getString("max_accuracy", "30"));
+		minimumTimeDifference = Integer.parseInt(preferences.getString("minimum_time_difference", "0"));
+		minimumDistanceDifference = Integer.parseInt(preferences.getString("minimum_distance_difference", "25"));
+		host = preferences.getString("host", "");
+		username = preferences.getString("username", "");
+		password = preferences.getString("password", "");
 	}
 }

@@ -159,9 +159,9 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
     
     public void startLocationService(boolean startService) {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		int max_accuracy = Integer.parseInt(preferences.getString("max_accuracy", "100"));
+		int max_accuracy = Integer.parseInt(preferences.getString("max_accuracy", "30"));
 		int minimum_time_difference = Integer.parseInt(preferences.getString("minimum_time_difference", "0"));
-		int minimum_distance_difference = Integer.parseInt(preferences.getString("minimum_distance_difference", "0"));
+		int minimum_distance_difference = Integer.parseInt(preferences.getString("minimum_distance_difference", "25"));
 		
     	Intent intent = new Intent(this, TsisLocationHandler.class);
     	intent.putExtra("max_accuracy", max_accuracy);
