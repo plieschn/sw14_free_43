@@ -1,0 +1,8 @@
+ul#manually_setup_list li { 
+  margin-top:0.5em;
+  margin-bottom:0.5em;
+}
+
+input#test_connection_button { 
+  padding:1em 5em;
+}
