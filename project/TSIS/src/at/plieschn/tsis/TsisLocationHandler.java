@@ -65,13 +65,13 @@ public class TsisLocationHandler extends Service {
 	public void updateLocation(Location location) {
     	System.out.println("DEBUG: got location");
     	double height = 0.0;
-		
+    	
+    	if(location.getAccuracy() > maxAccuracy)
+    		return;
 		if(!storedLocation.isEmpty())
 		{
 			distance += location.distanceTo(storedLocation.lastElement());
 			height = location.getAltitude();
-			if(height == 0.0)
-				height = Math.random() * 50;
 			altitude += Math.abs(storedLocation.lastElement().getAltitude() - height);
 		}
 		
@@ -79,8 +79,6 @@ public class TsisLocationHandler extends Service {
 		
     	if(caller != null)
     		caller.locationChanged();
-		//distanceTextView.setText(distance + "m");
-		//altitudeTextView.setText(altitude + "m");
     	
     	chart.addData(location.getTime(), distance, altitude, height);
 	}
@@ -125,7 +123,9 @@ public class TsisLocationHandler extends Service {
 		super.onCreate();
 		Log.d("Service", "onCreate");
 		storedLocation = new Vector<Location>();
-		chart = new Chart();
+		chart = new Chart(getString(R.string.distance_fifteen_min), 
+				getString(R.string.altitude_fifteen_min), 
+				getString(R.string.height_fifteen_min));
 	}
 
 	@Override
