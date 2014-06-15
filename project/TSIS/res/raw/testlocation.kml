@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+<name>TSIS Tracker</name>
+<Style id="lineStyle">
+<LineStyle>
+<color>ff0000ff</color>
+<width>5</width>
+</LineStyle>
+</Style>
+<Folder>
+<name>Trackpart 1</name>
+<Placemark>
+<styleUrl>#lineStyle</styleUrl>
+<gx:Track id="1">
+<tessellate>1</tessellate>
+<when>1970-01-01T01:16:40Z</when>
+<gx:coord>47.069523 15.450572 354.11</gx:coord>
+<when>1970-01-01T01:17:40Z</when>
+<gx:coord>47.069612 15.450412 354.21</gx:coord>
+<when>1970-01-01T01:18:40Z</when>
+<gx:coord>47.069643 15.450456 354.52</gx:coord>
+</gx:Track>
+</Placemark>
+</Folder>
+</Document>
+</kml>

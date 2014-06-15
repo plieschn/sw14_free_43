@@ -17,29 +17,29 @@ import android.content.Context;
 import android.graphics.Color;
 
 public class Chart {
-    private GraphicalView chartView;
+    protected GraphicalView chartView;
 
-    private XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-    private XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer(2);
-    private XYSeries distanceSeries;
-    private XYSeries altitudeSeries;
-    private XYSeries heightSeries;
-    private XYSeriesRenderer distanceRenderer;
-    private XYSeriesRenderer altitudeRenderer;
-    private XYSeriesRenderer heightRenderer;
+    protected XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+    protected XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer(2);
+    protected XYSeries distanceSeries;
+    protected XYSeries altitudeSeries;
+    protected XYSeries heightSeries;
+    protected XYSeriesRenderer distanceRenderer;
+    protected XYSeriesRenderer altitudeRenderer;
+    protected XYSeriesRenderer heightRenderer;
     
-    private String[] types;
+    protected String[] types;
 
-    private class Point {
+    protected class Point {
     	public int index;
     	public long time;
     	public float distance;
     	public double altitude;
     	public double height;
     }
-    private Vector<Point> points;
+    protected Vector<Point> points;
 
-    private void redrawChart() {
+    protected void redrawChart() {
     	distanceSeries.clear();
     	distanceSeries.add(0, 0);
     	altitudeSeries.clear();
@@ -133,13 +133,14 @@ public class Chart {
     		Point firstPoint = points.firstElement();
     		Point lastPoint = points.lastElement();
     		long startTime = firstPoint.time;
-    		while(firstPoint != lastPoint && (startTime + quartHour) < time) {
+    		long tempStartTime = startTime;
+    		while(firstPoint != lastPoint && (tempStartTime + quartHour) <= time) {
     			points.remove(firstPoint);
     			firstPoint = points.firstElement();
-    			startTime = firstPoint.time;
+    			tempStartTime = firstPoint.time;
     		}
     		
-    		if((lastPoint.time + quartHour) < time) {
+    		if((lastPoint.time + quartHour) <= time) {
     			points.clear();
         		Point newPoint = new Point();
         		newPoint.index = 1;
