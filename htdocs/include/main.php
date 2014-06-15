@@ -54,9 +54,7 @@ class Main {
 
     if($path_array[0] != '' &&
        $path_array[0] != 'Setup' &&
-       $path_array[0] != 'OPDS' &&
-       $path_array[0] != 'Courses' &&
-       $path_array[0] != 'Lecturers' &&
+       $path_array[0] != 'Projects' &&
        $path_array[0] != 'Login' &&
        $path_array[0] != 'Register' &&
        $path_array[0] != 'Logout') {
@@ -83,24 +81,8 @@ class Main {
       } else {
         $this->resourceNotFound($smarty, $baselink);
       }
-    } else if($path_array[0] == 'OPDS') {
-      $content = $content_factory->getContent('opds');
-      if($content != NULL) {
-        $main_menu_items = $content->setMainMenuItems($path_array, $baselink, $main_menu_items, $content_factory);
-        $smarty_output = $content->get($path_array, $baselink, $main_menu_items, NULL, $content_factory, $smarty);
-      } else {
-        $this->resourceNotFound($smarty, $baselink);
-      }
-    } else if($path_array[0] == 'Courses') {
-      $content = $content_factory->getContent('courses');
-      if($content != NULL) {
-        $main_menu_items = $content->setMainMenuItems($path_array, $baselink, $main_menu_items, $content_factory);
-        $smarty_output = $content->get($path_array, $baselink, $main_menu_items, NULL, $content_factory, $smarty);
-      } else {
-        $this->resourceNotFound($smarty, $baselink);
-      }
-    } else if($path_array[0] == 'Lecturers') {
-      $content = $content_factory->getContent('lecturers');
+    } else if($path_array[0] == 'Projects') {
+      $content = $content_factory->getContent('projects');
       if($content != NULL) {
         $main_menu_items = $content->setMainMenuItems($path_array, $baselink, $main_menu_items, $content_factory);
         $smarty_output = $content->get($path_array, $baselink, $main_menu_items, NULL, $content_factory, $smarty);

@@ -6,6 +6,7 @@ require_once('setup.php');
 require_once('setup_automatic.php');
 require_once('setup_manually.php');
 require_once('setup_test.php');
+require_once('projects.php');
 require_once('login.php');
 require_once('register.php');
 require_once('logout.php');
@@ -17,6 +18,7 @@ class ContentFactory {
                           'setup_automatic' => new SetupAutomatic(),
                           'setup_manually' => new SetupManually(),
                           'setup_test' => new SetupTest(),
+                          'projects' => new Projects(),
                           'login' => new Login(),
                           'register' => new Register(),
                           'logout' => new Logout());
