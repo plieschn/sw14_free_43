@@ -52,7 +52,7 @@ public class KmlTrack {
 			nameElement.appendChild(doc.createTextNode("TSIS Tracker")); // FIXXXME
 			documentElement.appendChild(nameElement);
 			
-			Element styleElement = doc.createElement("style");
+			Element styleElement = doc.createElement("Style");
 			styleElement.setAttribute("id", "lineStyle");
 			documentElement.appendChild(styleElement);
 			
@@ -60,11 +60,11 @@ public class KmlTrack {
 			styleElement.appendChild(lineStyleElement);
 			
 			Element colorElement = doc.createElement("color");
-			colorElement.appendChild(doc.createTextNode("64eeee17"));
+			colorElement.appendChild(doc.createTextNode("ff0000ff"));
 			lineStyleElement.appendChild(colorElement);
 			
 			Element widthElement = doc.createElement("width");
-			widthElement.appendChild(doc.createTextNode("3"));
+			widthElement.appendChild(doc.createTextNode("5"));
 			lineStyleElement.appendChild(widthElement);
 			
 			Element folderElement = doc.createElement("Folder");
@@ -77,11 +77,12 @@ public class KmlTrack {
 			Element placemarkElement = doc.createElement("Placemark");
 			folderElement.appendChild(placemarkElement);
 			
-			Element styleUrlElement = doc.createElement("StyleUrl");
+			Element styleUrlElement = doc.createElement("styleUrl");
 			styleUrlElement.appendChild(doc.createTextNode("#lineStyle"));
 			placemarkElement.appendChild(styleUrlElement);
 			
 			Element gxTrackElement = doc.createElementNS("http://www.google.com/kml/ext/2.2", "gx:Track");
+			gxTrackElement.setAttribute("id", ""+trackPart);
 			placemarkElement.appendChild(gxTrackElement);
 			
 			Element tessellateElement = doc.createElement("tessellate");
