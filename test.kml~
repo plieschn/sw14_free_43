@@ -1,0 +1,18 @@
+<?xml version="1.0" ?><kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+<name>rosy_lwyk4JsBN5nbgrvZPpfT.kml</name>
+<Style id="lineStyle">
+<LineStyle>
+<color>ff0000ff</color>
+<width>5</width>
+</LineStyle>
+</Style>
+<Folder>
+<name>lwyk4JsBN5nbgrvZPpfT</name>
+<Placemark>
+<styleUrl>#lineStyle</styleUrl>
+
+<gx:Track><tessellate>1</tessellate><when>2013-09-04T08:25:00.142Z</when><when>2013-09-04T08:25:01.038Z</when><when>2013-09-04T08:25:02.097Z</when><when>2013-09-04T08:25:03.056Z</when><when>2013-09-04T08:25:04.067Z</when><gx:coord>15.147537592427353 47.04351470905308 455.0</gx:coord><gx:coord>15.14754142582748 47.04351255596844 455.0</gx:coord><gx:coord>15.147545131413496 47.04351007281513 455.0</gx:coord><gx:coord>15.14754878879578 47.04351114713411 455.0</gx:coord><gx:coord>15.147548818583726 47.043511131818605 455.0</gx:coord></gx:Track></Placemark>
+</Folder>
+</Document>
+</kml>

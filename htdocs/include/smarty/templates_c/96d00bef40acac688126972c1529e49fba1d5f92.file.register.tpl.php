@@ -1,17 +1,17 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2014-06-13 14:05:13
+<?php /* Smarty version Smarty-3.1.12, created on 2014-06-15 00:21:22
          compiled from "include/smarty/templates/register.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:1729386526539b05191958e1-19701814%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:883142290539ce7029b4300-11680272%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '96d00bef40acac688126972c1529e49fba1d5f92' => 
     array (
       0 => 'include/smarty/templates/register.tpl',
-      1 => 1402665080,
+      1 => 1402790652,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '1729386526539b05191958e1-19701814',
+  'nocache_hash' => '883142290539ce7029b4300-11680272',
   'function' => 
   array (
   ),
@@ -22,26 +22,19 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
   'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_539b05191a0734_37673781',
+  'unifunc' => 'content_539ce7029d9b19_60790130',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_539b05191a0734_37673781')) {function content_539b05191a0734_37673781($_smarty_tpl) {?><!DOCTYPE html>
+<?php if ($_valid && !is_callable('content_539ce7029d9b19_60790130')) {function content_539ce7029d9b19_60790130($_smarty_tpl) {?><!DOCTYPE html>
 <html>
   <head>
-		<style type="text/css" media="screen">
-		</style>			
+    <style type="text/css" media="screen">
+    </style>
+    <?php echo $_smarty_tpl->getSubTemplate ("head.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 
-    <meta charset="utf-8"/>
-    <title>OPDS Courses</title>
-    <meta name="description" content="This is a testing project for a courses software using opds catalogs. It represents the server side that it utilized by an android application on the client site."/>
-    <meta name="keywords" content="OPDS, courses, Atom, Http, Acquisition, Navigation, RFC" />
-    <meta name="geo.region" content="AT-6"/>
-    <meta name="geo.placename" content="Graz"/>
-    <meta name="geo.position" content="47.0666666667;15.4333333333"/>
-    <meta name="ICBM" content="47.0666666667, 15.4333333333"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>
   </head>
   <body>
-    <h1>OPDS Courses</h1>
+    <?php echo $_smarty_tpl->getSubTemplate ("heading.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
+
     <?php echo $_smarty_tpl->getSubTemplate ('main_menu.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array('baselink'=>$_smarty_tpl->tpl_vars['baselink']->value,'items'=>$_smarty_tpl->tpl_vars['main_menu_items']->value), 0);?>
 
 
