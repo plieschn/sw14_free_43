@@ -39,7 +39,7 @@ class ContentFactory {
                      'Register' => 'Register');
     } else {
       $items = array('' => 'About',
-                     'Setup' => 'Setup',
+		     'Projects' => 'Projects',
                      'Logout' => 'Logout');
     }
     return $items;
