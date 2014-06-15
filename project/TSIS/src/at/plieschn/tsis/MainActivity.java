@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 			TsisLocationHandler locationService = binder.getService();
 			MainActivity activity = MainActivity.this;
 			locationService.setCaller(activity);
-			locationService.initChart(activity);
+			locationService.initChart(activity); // FIXXXME
 			FrameLayout layout = (FrameLayout) activity.findViewById(R.id.chart);
 			layout.removeAllViews();
 			layout.addView(locationService.initChart(activity));
