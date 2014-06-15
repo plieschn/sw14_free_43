@@ -68,8 +68,9 @@ public class TsisLocationHandler extends Service {
 		return systemBinder;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Vector<Location> getStoredLocation() {
-		return storedLocation;
+		return (Vector<Location>) storedLocation.clone();
 	}
 	
 	public static void setSystemBinder(TsisLocationBinder systemBinder) {
@@ -172,7 +173,7 @@ public class TsisLocationHandler extends Service {
 
 		startForeground(SERVICE_RUNNING_NOTIFICATION_ID, notification);
 		executorService = Executors.newScheduledThreadPool(1);
-		executorService.scheduleAtFixedRate(new TsisSynchronizer(this, host, username, password), 0, uploadInterval, TimeUnit.MINUTES);
+		executorService.scheduleAtFixedRate(new TsisSynchronizer(this, host, username, password, "TSIS Tracker"), 0, uploadInterval, TimeUnit.MINUTES); // FIXXXME
 		
 		return START_STICKY;
 	}

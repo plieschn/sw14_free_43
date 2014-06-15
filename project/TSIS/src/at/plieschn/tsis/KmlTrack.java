@@ -22,11 +22,13 @@ import android.location.Location;
 
 public class KmlTrack {
 	private Vector<Location> trackPoints;
+	private String trackName;
 	private int trackPart;
 	
-	public KmlTrack(Vector<Location> locations, int currentTrackPart) {
-		trackPoints = locations;
-		trackPart = currentTrackPart;
+	public KmlTrack(Vector<Location> locations, String trackName, int trackPart) {
+		this.trackPoints = locations;
+		this.trackName = trackName;
+		this.trackPart = trackPart;
 	}
 	
 	public int getTrackPart() {
@@ -49,7 +51,7 @@ public class KmlTrack {
 			kmlRootElement.appendChild(documentElement);
 			
 			Element nameElement = doc.createElement("name");
-			nameElement.appendChild(doc.createTextNode("TSIS Tracker")); // FIXXXME
+			nameElement.appendChild(doc.createTextNode(trackName));
 			documentElement.appendChild(nameElement);
 			
 			Element styleElement = doc.createElement("Style");
@@ -71,7 +73,7 @@ public class KmlTrack {
 			documentElement.appendChild(folderElement);
 			
 			Element folderNameElement = doc.createElement("name");
-			folderNameElement.appendChild(doc.createTextNode("Trackpart "+trackPart)); //FIXXXME
+			folderNameElement.appendChild(doc.createTextNode(trackName + " part "+trackPart)); //FIXXXME
 			folderElement.appendChild(folderNameElement);
 			
 			Element placemarkElement = doc.createElement("Placemark");

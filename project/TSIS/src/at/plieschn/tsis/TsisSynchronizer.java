@@ -1,11 +1,13 @@
 package at.plieschn.tsis;
 
+import java.util.Vector;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import android.location.Location;
 import at.plieschn.tsis.UploadTrackTask.OnTrackUploaded;
 
 public class TsisSynchronizer implements OnTrackUploaded, RunnableScheduledFuture<Void>{
@@ -14,14 +16,23 @@ public class TsisSynchronizer implements OnTrackUploaded, RunnableScheduledFutur
 	private String host;
 	private String username;
 	private String password;
+	
+	private String trackName;
+	private int trackNum;
+	
+	private Vector<KmlTrack> tracks;
 
 	public TsisSynchronizer(TsisLocationHandler handler,
-			String host, String username, String password) {
+			String host, String username, String password, String trackName) {
 		super();
 		this.handler = handler;
 		this.host = host;
 		this.username = username;
 		this.password = password;
+		this.trackName = trackName;
+		
+		trackNum = 0;
+		tracks = new Vector<KmlTrack>();
 	}
 	
 	@Override
@@ -32,7 +43,8 @@ public class TsisSynchronizer implements OnTrackUploaded, RunnableScheduledFutur
 
 		done = false;
 		UploadTrackTask uploadTrackTask = new UploadTrackTask(this);
-		uploadTrackTask.execute(host, username, password);
+		uploadTrackTask.execute(host, username, password, trackName, ""+trackNum);
+		++trackNum;
 	}
 	
 	@Override
@@ -88,6 +100,28 @@ public class TsisSynchronizer implements OnTrackUploaded, RunnableScheduledFutur
 	public boolean isPeriodic() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Vector<Location> getLocations() {
+		return handler.getStoredLocation();
+	}
+
+	@Override
+	public void saveKmlTrack(KmlTrack track) {
+		tracks.add(track);
+		
+	}
+
+	@Override
+	public Vector<KmlTrack> getTracks() {
+		return tracks;
+	}
+
+	@Override
+	public void trackTransfered(KmlTrack track) {
+		tracks.remove(track);
+		
 	}
 
 
