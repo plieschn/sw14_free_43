@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2014-06-15 00:07:13
+<?php /* Smarty version Smarty-3.1.12, created on 2014-06-15 14:20:53
          compiled from "include/smarty/templates/about.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1863362950539ce3b1566a14-37135766%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '10f1ab7ad062df5d7c0d0ccdacffad4ad6ee993b' => 
     array (
       0 => 'include/smarty/templates/about.tpl',
-      1 => 1402790652,
+      1 => 1402842050,
       2 => 'file',
     ),
   ),
@@ -15,14 +15,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_539ce3b158bd92_45007901',
   'variables' => 
   array (
     'baselink' => 0,
     'main_menu_items' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_539ce3b158bd92_45007901',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_539ce3b158bd92_45007901')) {function content_539ce3b158bd92_45007901($_smarty_tpl) {?><!DOCTYPE html>
 <html>
@@ -39,7 +39,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 
 
     <div id="content">
-      <h2>About this project</h2>
+      <h2>About TSIS</h2>
     </div>
     <?php echo $_smarty_tpl->getSubTemplate ('footer.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array('baselink'=>$_smarty_tpl->tpl_vars['baselink']->value), 0);?>
 

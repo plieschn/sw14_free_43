@@ -111,23 +111,289 @@ class Point {
   public function getWhen() {
     return $this->when;
   }
+
+  public function getWhenOut() {
+    $datetime = new DateTimeImmutable($this->when);
+    return $datetime->format('Y-m-d\\TH:i:s\\Z');
+  }
 }
 
 class Projects extends Content {
   public function get($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
-    if(count($path_array) > 2) {
-      if($path_array[1] == 'View') {
-        $this->view($path_array, $baselink, $main_menu_items, $sub_menu_items, $content_factory, $smarty);
-      } else if($path_array[1] == 'Enter') {
-        $this->enter($path_array, $baselink, $main_menu_items, $sub_menu_items, $content_factory, $smarty);
-      }
-    } else {
-
+    if(count($path_array) == 2) {
+      return $this->viewOverview($path_array, $baselink, $main_menu_items, $sub_menu_items, $content_factory, $smarty);
+    } else if(count($path_array) == 4 && $path_array[1] == 'KML') {
+      return $this->viewKML($path_array, $baselink, $main_menu_items, $sub_menu_items, $content_factory, $smarty);
+    } else if(count($path_array) == 4 && $path_array[1] == 'View') {
+      return $this->viewSpecific($path_array, $baselink, $main_menu_items, $sub_menu_items, $content_factory, $smarty);
+    } else if(count($path_array) == 3 && $path_array[1] == 'Enter') {
+      $this->enter($path_array, $baselink, $main_menu_items, $sub_menu_items, $content_factory, $smarty);
     }
+
   }
 
-  private function view($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
+  private function viewOverview($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
+    $projects = $this->getProjects();
 
+    $tpl = 'projects_view_overview.tpl';
+    $smarty->assign('baselink', $baselink);
+    $smarty->assign('selected', 'Projects');
+    $smarty->assign('projects', $projects);
+    $smarty->assign('main_menu_items', $main_menu_items);
+    $smarty_output = $smarty->fetch($tpl);
+    return $smarty_output;
+  }
+
+  private function getProjects() {
+    $query = 'select id, name from ' . $this->table_prefix_ . 'projects';
+
+    $this->connect();
+    $statement = $this->database->prepare($query);
+    if(!$statement->prepareWorked()) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->execute()) {
+      print($this->database->getError());
+      print($statement->getError());
+      return;
+    }
+
+    $id = NULL;
+    $name = NULL;
+    $result = $statement->bindResults(array(&$id, &$name));
+
+    $project_objects = array();
+    while($statement->fetch()) {
+      $project_object = new Project($name);
+      $project_object->setId($id);
+      array_push($project_objects, $project_object);
+    }
+
+    return $project_objects;
+  }
+
+  private function viewKML($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
+    $project_name = $path_array[2];
+    $project = $this->getProject($project_name);
+    $tracks = $this->getTracksForProject($project);
+
+    $track_numbers = array();
+    $tracks_points_map = array();
+    foreach($tracks as $track) {
+      $points = $this->getPointsForTrack($project, $track);
+      $tracks_points_map[$track->getNumber()] = $points;
+      $track_objects[$track->getNumber()] = $track;
+    }
+
+    $project_kml = $this->buildProjectKml($project,
+					  $tracks,
+					  $track_numbers,
+					  $tracks_points_map);
+    $tpl = 'projects_view_kml.tpl';
+    $smarty->assign('baselink', $baselink);
+    $smarty->assign('selected', 'Projects');
+    $smarty->assign('project_kml', $project_kml);
+    $smarty->assign('main_menu_items', $main_menu_items);
+    $smarty_output = $smarty->fetch($tpl);
+    header('Content-Type: application/xml; charset=utf-8');
+    return $smarty_output;
+  }
+
+  private function viewSpecific($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
+    $project_name = $path_array[2];
+    $project = $this->getProject($project_name);
+    
+    $tpl = 'projects_view_specific.tpl';
+    $smarty->assign('baselink', $baselink);
+    $smarty->assign('selected', 'Projects');
+    $smarty->assign('project_name', $project_name);
+    $smarty->assign('timestamp', (new DateTimeImmutable())->getTimestamp());
+    $smarty->assign('main_menu_items', $main_menu_items);
+    $smarty_output = $smarty->fetch($tpl);
+    return $smarty_output;
+  }
+
+  private function getProject($project_name) {
+    $query = 'select id, name from ' . $this->table_prefix_ . 'projects where name = ?';
+
+    $this->connect();
+    $statement = $this->database->prepare($query);
+    if(!$statement->prepareWorked()) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_STRING, 'name', &$project_name)))) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->execute()) {
+      print($this->database->getError());
+      print($statement->getError());
+      return;
+    }
+
+    $id = NULL;
+    $name = NULL;
+    $result = $statement->bindResults(array(&$id, &$name));
+
+    $statement->fetch();
+    $project_object = new Project($name);
+    $project_object->setId($id);
+    return $project_object;
+  }
+
+  private function getTracksForProject($project) {
+    $query = 'select id, number from ' . $this->table_prefix_ . 'tracks where project_id = ?';
+
+    $this->connect();
+    $statement = $this->database->prepare($query);
+    if(!$statement->prepareWorked()) {
+      print($this->database->getError());
+      return;
+    }
+
+    $project_id = $project->getId();
+    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_INT, 'project_id', &$project_id)))) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->execute()) {
+      print($this->database->getError());
+      print($statement->getError());
+      return;
+    }
+
+    $id = NULL;
+    $number = NULL;
+    $result = $statement->bindResults(array(&$id, &$number));
+
+    $track_objects = array();
+    while($statement->fetch()) {
+      $track_object = new Track($project, $number);
+      $track_object->setId($id);
+      array_push($track_objects, $track_object);
+    }
+    return $track_objects;
+  }
+
+  private function getPointsForTrack($project, $track) {
+    $query = 'select id, number, longitude, latitude, height, `when` from ' . $this->table_prefix_ . 'points where track_id = ?';
+
+    $this->connect();
+    $statement = $this->database->prepare($query);
+    if(!$statement->prepareWorked()) {
+      print($this->database->getError());
+      return;
+    }
+
+    $track_id = $track->getId();
+    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_INT, 'track_id', &$track_id)))) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->execute()) {
+      print($this->database->getError());
+      print($statement->getError());
+      return;
+    }
+
+    $id = NULL;
+    $number = NULL;
+    $longitude = NULL;
+    $latitude = NULL;
+    $height = NULL;
+    $when = NULL;
+    $result = $statement->bindResults(array(&$id, &$number, &$longitude, &$latitude, 
+					    &$height, &$when));
+
+    $point_objects = array();
+    while($statement->fetch()) {
+      $point_object = new Point($project, $track, $number, 
+				$longitude, $latitude, $height, $when);
+      $point_object->setId($id);
+      array_push($point_objects, $point_object);
+    }
+    return $point_objects;
+  }
+
+  private function buildProjectKml($project,
+				   $tracks,
+				   $track_numbers,
+				   $tracks_points_map) {
+    $dom = new DOMDocument('1.0', 'utf-8');
+    $dom->formatOutput = true;
+    $kml = $dom->createElementNS('http://www.opengis.net/kml/2.2', 'kml');
+    
+    $kml->setAttribute('xmlns:gx', 'http://www.google.com/kml/ext/2.2');
+
+    $document = $dom->createElement('Document');
+    $kml->appendChild($document);
+
+    $document_name = $dom->createElement('name');
+    $document_name->appendChild($dom->createTextNode($project->getName()));
+    $document->appendChild($document_name);
+
+    $style = $dom->createElement('Style');
+    $document->appendChild($style);
+    $style->setAttribute('id', 'lineStyle');
+
+    $line_style = $dom->createElement('LineStyle');
+    $style->appendChild($line_style);
+
+    $color = $dom->createElement('color');
+    $line_style->appendChild($color);
+    $color->appendChild($dom->createTextNode('ff0000ff'));
+    
+    $width = $dom->createElement('width');
+    $line_style->appendChild($width);
+    $width->appendChild($dom->createTextNode('5'));
+
+    $folder = $dom->createElement('Folder');
+    $document->appendChild($folder);
+
+    $folder_name = $dom->createElement('name');
+    $folder_name->appendChild($dom->createTextNode($project->getName()));
+    $folder->appendChild($folder_name);
+
+    $placemark = $dom->createElement('Placemark');
+    $folder->appendChild($placemark);
+
+    $style_url = $dom->createElement('styleUrl');
+    $placemark->appendChild($style_url);
+    $style_url->appendChild($dom->createTextNode('#lineStyle'));
+
+    foreach($tracks as $track) {
+      $track_xml = $dom->createElement('gx:Track');
+      $placemark->appendChild($track_xml);
+
+      $tessellate = $dom->createElement('tessellate');
+      $track_xml->appendChild($tessellate);
+      $tessellate->appendChild($dom->createTextNode('1'));
+
+      foreach($tracks_points_map[$track->getNumber()] as $track_id => $point) {
+	$when_xml = $dom->createElement('when');
+	$when_xml->appendChild($dom->createTextNode($point->getWhenOut()));
+	$track_xml->appendChild($when_xml);
+      }
+	
+      foreach($tracks_points_map[$track->getNumber()] as $track_id => $point) {
+	$coord_xml = $dom->createElement('gx:coord');
+	$coord_string = $point->getLongitude() . ' ' . 
+	  $point->getLatitude() . ' ' . $point->getHeight();
+	$coord_xml->appendChild($dom->createTextNode($coord_string));
+	$track_xml->appendChild($coord_xml);
+      }
+    }
+
+    $dom->appendChild($kml);
+
+    return $dom->saveXML();
   }
 
   private function enter($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
@@ -398,8 +664,8 @@ class Projects extends Content {
                                          array(ParamType::PARAM_TYPE_INT, 'track_id', &$track_id),
                                          array(ParamType::PARAM_TYPE_INT, 'number', &$number),
                                          array(ParamType::PARAM_TYPE_STRING, 'longitude', &$longitude),
-                                         array(ParamType::PARAM_TYPE_INT, 'latitude', &$latitude),
-                                         array(ParamType::PARAM_TYPE_INT, 'height', &$height),
+                                         array(ParamType::PARAM_TYPE_STRING, 'latitude', &$latitude),
+                                         array(ParamType::PARAM_TYPE_STRING, 'height', &$height),
                                          array(ParamType::PARAM_TYPE_STRING, 'when', &$when)))) {
       print($this->database->getError());
       return false;

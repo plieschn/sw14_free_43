@@ -40,6 +40,7 @@ class Login extends Content {
       return $smarty_output;
     } else {
       $_SESSION['username'] = $username;
+      $main_menu_items = $content_factory->mainMenuItems();
       $tpl = 'about.tpl';
       $smarty->assign('baselink', $baselink);
       $smarty->assign('selected', 'About');
