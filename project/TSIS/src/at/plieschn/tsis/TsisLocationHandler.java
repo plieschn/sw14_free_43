@@ -172,6 +172,7 @@ public class TsisLocationHandler extends Service {
 		Notification notification = builder.build();
 
 		startForeground(SERVICE_RUNNING_NOTIFICATION_ID, notification);
+		updatePreferences();
 		executorService = Executors.newScheduledThreadPool(1);
 		executorService.scheduleAtFixedRate(new TsisSynchronizer(this, host, username, password, "TSIS Tracker"), 0, uploadInterval, TimeUnit.MINUTES); // FIXXXME
 		
