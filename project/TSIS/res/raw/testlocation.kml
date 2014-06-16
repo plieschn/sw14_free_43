@@ -15,11 +15,11 @@
 <gx:Track id="1">
 <tessellate>1</tessellate>
 <when>1970-01-01T01:16:40Z</when>
-<gx:coord>47.069523 15.450572 354.11</gx:coord>
+<gx:coord>15.450572 47.069523 354.11</gx:coord>
 <when>1970-01-01T01:17:40Z</when>
-<gx:coord>47.069612 15.450412 354.21</gx:coord>
+<gx:coord>15.450412 47.069612 354.21</gx:coord>
 <when>1970-01-01T01:18:40Z</when>
-<gx:coord>47.069643 15.450456 354.52</gx:coord>
+<gx:coord>15.450456 47.069643 354.52</gx:coord>
 </gx:Track>
 </Placemark>
 </Folder>
