@@ -52,7 +52,7 @@ public class TsisLocationHandler extends Service {
 	private Chart chart;
 	
 	private static float distance = 0;
-	private double altitude = 0.0;
+	private static double altitude = 0.0;
 	private OnLocationChanged caller;
 	private static TsisLocationBinder systemBinder;
 	
@@ -131,6 +131,10 @@ public class TsisLocationHandler extends Service {
 	
 	public static float getDistance() {
 		return distance;
+	}
+	
+	public static double getAltitude() {
+		return altitude;
 	}
 	
 	@Override

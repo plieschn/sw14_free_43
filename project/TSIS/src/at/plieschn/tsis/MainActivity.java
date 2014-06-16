@@ -186,12 +186,17 @@ public class MainActivity extends ActionBarActivity implements OnLocationChanged
 	@Override
 	public void locationChanged() {
 		float distance = TsisLocationHandler.getDistance();
-		System.out.println("DEBUG: distance " + distance);
+		double altitude = TsisLocationHandler.getAltitude();
 		
 		TextView distanceTextView = (TextView) findViewById(R.id.distanceTextView);
+		TextView altitudeTextView = (TextView) findViewById(R.id.altitudeTextView);
 		
 		if(distanceTextView != null) {
 			distanceTextView.setText(distance + "m");
+		}
+		
+		if(altitudeTextView != null) {
+			altitudeTextView.setText(altitude + "m");
 		}
 	}
 }
