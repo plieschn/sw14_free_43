@@ -17,6 +17,7 @@ import com.robotium.solo.Solo;
 public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
 	private Button startStopButton;
 	private TextView distanceTextView;
+	private TextView altitudeTextView;
 	private Solo solo;
 	
 	private LocationManager testLocationManager;
@@ -56,6 +57,7 @@ public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
 		solo = new Solo(getInstrumentation(), getActivity());
 		startStopButton = (Button) solo.getView(at.plieschn.tsis.R.id.startStopButton);
 		distanceTextView = (TextView) solo.getView(at.plieschn.tsis.R.id.distanceTextView);
+		altitudeTextView = (TextView) solo.getView(at.plieschn.tsis.R.id.altitudeTextView);
 		testLocationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 		
 		addTestProvider(PROVIDER_NAME);
@@ -99,12 +101,15 @@ public class UITests extends ActivityInstrumentationTestCase2<MainActivity> {
 		solo.sleep(1100);
 		
 		assertEquals("Is first Location send", "0.0m", distanceTextView.getText().toString());
+		assertEquals("Is altitude set correct", "0.0m", altitudeTextView.getText().toString());
 
 		Location locationB = createLocation((float)47.069523,(float)15.450572, 354.110);		
 		sendLocation(locationB);
 		solo.sleep(1000);
 		
+		double altitude = 355.112 - 354.110;
 		System.out.println("DEBUG: expected distance " + locationB.distanceTo(locationA));
 		assertEquals("Is second Location send", locationB.distanceTo(locationA)+"m", distanceTextView.getText().toString());
+		assertEquals("Is altitude calculated correct?", altitude+"m", altitudeTextView.getText().toString());
 	}
 }
