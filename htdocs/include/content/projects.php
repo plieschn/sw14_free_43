@@ -407,6 +407,8 @@ class Projects extends Content {
     $password = $_POST['password'];
     $file_content = $_POST['file_content'];
 
+    var_dump($_POST);
+
     $document = new DOMDocument();
     $document->loadXML($file_content);
 
