@@ -413,7 +413,19 @@ class Projects extends Content {
 
   private function enter($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
     $objects = $this->getObjects();
-    $this->enterObjects($objects);
+    
+    if($objects == null) {
+      print("false");
+      return null;
+    }
+
+    if(!$this->enterObjects($objects)) {
+      print("false");
+      return null;
+    }
+
+    print("true");
+    return;
   }
 
   private function getObjects() {
@@ -422,11 +434,10 @@ class Projects extends Content {
     $password = $_POST['password'];
     $file_content = $_POST['file_content'];
 
-    var_dump($_POST);
     $user_id = $this->getUserId($username, $password);
 
     if($user_id == null) {
-      return;
+      return null;
     }
 
     $document = new DOMDocument();
