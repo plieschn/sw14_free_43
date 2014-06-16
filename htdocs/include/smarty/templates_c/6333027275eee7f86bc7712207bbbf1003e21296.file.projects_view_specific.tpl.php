@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2014-06-15 19:03:09
+<?php /* Smarty version Smarty-3.1.12, created on 2014-06-16 17:48:12
          compiled from "include/smarty/templates/projects_view_specific.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:133433245539de441a60db9-82140881%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6333027275eee7f86bc7712207bbbf1003e21296' => 
     array (
       0 => 'include/smarty/templates/projects_view_specific.tpl',
-      1 => 1402858984,
+      1 => 1402940864,
       2 => 'file',
     ),
   ),
@@ -21,7 +21,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   array (
     'baselink' => 0,
     'main_menu_items' => 0,
-    'project_name' => 0,
+    'kml_name' => 0,
     'timestamp' => 0,
   ),
   'has_nocache_code' => false,
@@ -51,7 +51,7 @@ js/content/Projects/location.js"></script>
       <h2>Projects</h2>
       <div id="map"></div>
       <script type="text/javascript">initialize(15.14753759242735, 47.04351470905308, 17, '<?php echo $_smarty_tpl->tpl_vars['baselink']->value;?>
-Projects/KML/<?php echo $_smarty_tpl->tpl_vars['project_name']->value;?>
+Projects/KML/<?php echo $_smarty_tpl->tpl_vars['kml_name']->value;?>
 /?timestamp=<?php echo $_smarty_tpl->tpl_vars['timestamp']->value;?>
 ');</script>
     </div>

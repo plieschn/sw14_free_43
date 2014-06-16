@@ -11,9 +11,11 @@ use \DOMDocument as DOMDocument;
 class Project {
   private $id;
   private $name;
+  private $kml_name;
 
-  public function __construct($name) {
+  public function __construct($name, $kml_name) {
     $this->name = $name;
+    $this->kml_name = $kml_name;
   }
 
   public function getId() {
@@ -26,6 +28,10 @@ class Project {
 
   public function getName() {
     return $this->name;
+  }
+
+  public function getKmlName() {
+    return $this->kml_name;
   }
 }
 
@@ -181,7 +187,8 @@ class Projects extends Content {
 
     $project_objects = array();
     while($statement->fetch()) {
-      $project_object = new Project($name);
+      $kml_name = $this->projectNameToKmlName($name);
+      $project_object = new Project($name, $kml_name);
       $project_object->setId($id);
       array_push($project_objects, $project_object);
     }
@@ -219,11 +226,13 @@ class Projects extends Content {
   private function viewSpecific($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
     $project_name = $path_array[2];
     $project = $this->getProject($project_name);
+    $kml_name = $project->getKmlName();
     
     $tpl = 'projects_view_specific.tpl';
     $smarty->assign('baselink', $baselink);
     $smarty->assign('selected', 'Projects');
     $smarty->assign('project_name', $project_name);
+    $smarty->assign('kml_name', $kml_name);
     $smarty->assign('timestamp', (new DateTimeImmutable())->getTimestamp());
     $smarty->assign('main_menu_items', $main_menu_items);
     $smarty_output = $smarty->fetch($tpl);
@@ -256,7 +265,8 @@ class Projects extends Content {
     $result = $statement->bindResults(array(&$id, &$name));
 
     $statement->fetch();
-    $project_object = new Project($name);
+    $kml_name = $this->projectNameToKmlName($name);
+    $project_object = new Project($name, $kml_name);
     $project_object->setId($id);
     return $project_object;
   }
@@ -287,7 +297,8 @@ class Projects extends Content {
     $result = $statement->bindResults(array(&$id, &$name));
 
     $statement->fetch();
-    $project_object = new Project($name);
+    $kml_name = $this->projectNameToKmlName($name);
+    $project_object = new Project($name, $kml_name);
     $project_object->setId($id);
     return $project_object;
   }
@@ -478,7 +489,8 @@ class Projects extends Content {
     $track_objects = array();
     $point_objects = array();
 
-    $project_object = new Project($project_name);
+    $kml_name = $this->projectNameToKmlName($project_name);
+    $project_object = new Project($project_name, $kml_name);
     array_push($project_objects, $project_object);
 
     $tracks = $document->getElementsByTagNameNS('http://www.google.com/kml/ext/2.2', 'Track');

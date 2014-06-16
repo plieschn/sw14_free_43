@@ -18,7 +18,7 @@
     <div id="content">
       <h2>Projects</h2>
       <div id="map"></div>
-      <script type="text/javascript">initialize(15.14753759242735, 47.04351470905308, 17, '{$baselink}Projects/KML/{$project_name}/?timestamp={$timestamp}');</script>
+      <script type="text/javascript">initialize(15.14753759242735, 47.04351470905308, 17, '{$baselink}Projects/KML/{$kml_name}/?timestamp={$timestamp}');</script>
     </div>
     {include file='footer.tpl' baselink=$baselink}
   </body>
