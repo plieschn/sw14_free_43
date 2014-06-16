@@ -11,9 +11,11 @@ use \DOMDocument as DOMDocument;
 class Project {
   private $id;
   private $name;
+  private $kml_name;
 
-  public function __construct($name) {
+  public function __construct($name, $kml_name) {
     $this->name = $name;
+    $this->kml_name = $kml_name;
   }
 
   public function getId() {
@@ -26,6 +28,10 @@ class Project {
 
   public function getName() {
     return $this->name;
+  }
+
+  public function getKmlName() {
+    return $this->kml_name;
   }
 }
 
@@ -181,7 +187,8 @@ class Projects extends Content {
 
     $project_objects = array();
     while($statement->fetch()) {
-      $project_object = new Project($name);
+      $kml_name = $this->projectNameToKmlName($name);
+      $project_object = new Project($name, $kml_name);
       $project_object->setId($id);
       array_push($project_objects, $project_object);
     }
@@ -190,8 +197,8 @@ class Projects extends Content {
   }
 
   private function viewKML($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
-    $project_name = $path_array[2];
-    $project = $this->getProject($project_name);
+    $project_name_kml = $path_array[2];
+    $project = $this->getProjectKml($project_name_kml);
     $tracks = $this->getTracksForProject($project);
 
     $track_numbers = array();
@@ -219,11 +226,13 @@ class Projects extends Content {
   private function viewSpecific($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
     $project_name = $path_array[2];
     $project = $this->getProject($project_name);
+    $kml_name = $project->getKmlName();
     
     $tpl = 'projects_view_specific.tpl';
     $smarty->assign('baselink', $baselink);
     $smarty->assign('selected', 'Projects');
     $smarty->assign('project_name', $project_name);
+    $smarty->assign('kml_name', $kml_name);
     $smarty->assign('timestamp', (new DateTimeImmutable())->getTimestamp());
     $smarty->assign('main_menu_items', $main_menu_items);
     $smarty_output = $smarty->fetch($tpl);
@@ -256,7 +265,40 @@ class Projects extends Content {
     $result = $statement->bindResults(array(&$id, &$name));
 
     $statement->fetch();
-    $project_object = new Project($name);
+    $kml_name = $this->projectNameToKmlName($name);
+    $project_object = new Project($name, $kml_name);
+    $project_object->setId($id);
+    return $project_object;
+  }
+
+  private function getProjectKml($project_name_kml) {
+    $query = 'select id, name from ' . $this->table_prefix_ . 'projects where kml_name = ?';
+
+    $this->connect();
+    $statement = $this->database->prepare($query);
+    if(!$statement->prepareWorked()) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_STRING, 'name', &$project_name_kml)))) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->execute()) {
+      print($this->database->getError());
+      print($statement->getError());
+      return;
+    }
+
+    $id = NULL;
+    $name = NULL;
+    $result = $statement->bindResults(array(&$id, &$name));
+
+    $statement->fetch();
+    $kml_name = $this->projectNameToKmlName($name);
+    $project_object = new Project($name, $kml_name);
     $project_object->setId($id);
     return $project_object;
   }
@@ -447,7 +489,8 @@ class Projects extends Content {
     $track_objects = array();
     $point_objects = array();
 
-    $project_object = new Project($project_name);
+    $kml_name = $this->projectNameToKmlName($project_name);
+    $project_object = new Project($project_name, $kml_name);
     array_push($project_objects, $project_object);
 
     $tracks = $document->getElementsByTagNameNS('http://www.google.com/kml/ext/2.2', 'Track');
@@ -683,7 +726,7 @@ class Projects extends Content {
   }
 
   private function enterProject(&$project, $user_id) {
-    $query = 'insert into ' . $this->table_prefix_ . 'projects (name, person_id) values (?, ?)';
+    $query = 'insert into ' . $this->table_prefix_ . 'projects (name, person_id, kml_name) values (?, ?, ?)';
 
     $this->connect();
     $statement = $this->database->prepare($query);
@@ -693,8 +736,10 @@ class Projects extends Content {
     }
 
     $name = $project->getName();
+    $kml_name = $this->projectNameToKmlName($name);
     if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_STRING, 'name', &$name),
-					 array(ParamType::PARAM_TYPE_INT, 'person_id', &$user_id)))) {
+					 array(ParamType::PARAM_TYPE_INT, 'person_id', &$user_id),
+					 array(ParamType::PARAM_TYPE_STRING, 'kml_name', &$kml_name)))) {
       print($this->database->getError());
       return false;
     }
@@ -709,6 +754,10 @@ class Projects extends Content {
     $project->setId($id);
 
     return true;
+  }
+
+  private function projectNameToKmlName($project_name) {
+    return preg_replace('/\\s/', '_', $project_name);
   }
 
   private function enterTrack(&$track) {
