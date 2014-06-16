@@ -476,7 +476,7 @@ class Projects extends Content {
 
     $tracks_existed = array();
     foreach($tracks as $track) {
-      if(!$this->trackExists($track)) {
+      if(!$this->trackExists($project, $track)) {
         if(!$this->enterTrack($track)) {
           return false;
         }
@@ -557,8 +557,8 @@ class Projects extends Content {
   }
 
 
-  private function trackExists($track) {
-    $query = 'select count(*) as amount from ' . $this->table_prefix_ . 'tracks where number = ?';
+  private function trackExists($project, $track) {
+    $query = 'select count(*) as amount from ' . $this->table_prefix_ . 'tracks where number = ? and project_id = ?';
 
     $this->connect();
     $statement = $this->database->prepare($query);
@@ -568,7 +568,9 @@ class Projects extends Content {
     }
 
     $number = $track->getNumber();
-    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_INT, 'number', &$number)))) {
+    $project_id = $project->getId();
+    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_INT, 'number', &$number),
+					 array(ParamType::PARAM_TYPE_INT, 'project_id', &$project_id)))) {
       print($this->database->getError());
       return;
     }
