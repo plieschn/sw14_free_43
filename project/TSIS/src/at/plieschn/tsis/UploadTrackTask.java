@@ -86,7 +86,8 @@ public class UploadTrackTask extends AsyncTask<String, Void, Void> {
 		int trackNum = Integer.parseInt(params[4]);
 		
 		for(KmlTrack track: caller.getTracks()) {
-			uploadTrack(host, username, password, track);
+			if(uploadTrack(host, username, password, track))
+				caller.trackTransfered(track);
 		}
 		
 		Vector<Location> storedLocation = caller.getLocations();

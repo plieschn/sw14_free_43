@@ -70,7 +70,9 @@ public class TsisLocationHandler extends Service {
 	
 	@SuppressWarnings("unchecked")
 	public Vector<Location> getStoredLocation() {
-		return (Vector<Location>) storedLocation.clone();
+		Vector<Location> locationClone = (Vector<Location>) storedLocation.clone();
+		storedLocation.clear();
+		return locationClone;
 	}
 	
 	public static void setSystemBinder(TsisLocationBinder systemBinder) {
