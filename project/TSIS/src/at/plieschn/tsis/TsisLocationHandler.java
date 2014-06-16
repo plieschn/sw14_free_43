@@ -158,6 +158,7 @@ public class TsisLocationHandler extends Service {
 		maxAccuracy = intent.getExtras().getInt("max_accuracy");
 		minimumTimeDifference = intent.getExtras().getInt("minimum_time_difference");
 		minimumDistanceDifference = intent.getExtras().getInt("minimum_distance_difference");
+		String projectName = intent.getExtras().getString("project_name");
     	System.out.println("DEBUG: start Location Tracking");
 		startLocationTracking();
 		
@@ -178,7 +179,7 @@ public class TsisLocationHandler extends Service {
 		startForeground(SERVICE_RUNNING_NOTIFICATION_ID, notification);
 		updatePreferences();
 		executorService = Executors.newScheduledThreadPool(1);
-		executorService.scheduleAtFixedRate(new TsisSynchronizer(this, host, username, password, "TSIS Tracker"), 0, uploadInterval, TimeUnit.MINUTES); // FIXXXME
+		executorService.scheduleAtFixedRate(new TsisSynchronizer(this, host, username, password, projectName), 0, uploadInterval, TimeUnit.MINUTES); // FIXXXME
 		
 		return START_STICKY;
 	}
