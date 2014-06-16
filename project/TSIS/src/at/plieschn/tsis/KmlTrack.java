@@ -99,9 +99,9 @@ public class KmlTrack {
 				
 				Element gxCoordElement = doc.createElementNS("http://www.google.com/kml/ext/2.2", "gx:coord");
 				StringBuilder coordBuilder = new StringBuilder();
-				coordBuilder.append(Double.toString(location.getLatitude()));
-				coordBuilder.append(" ");
 				coordBuilder.append(Double.toString(location.getLongitude()));
+				coordBuilder.append(" ");
+				coordBuilder.append(Double.toString(location.getLatitude()));
 				coordBuilder.append(" ");
 				coordBuilder.append(Double.toString(location.getAltitude()));
 				gxCoordElement.appendChild(doc.createTextNode(coordBuilder.toString()));
@@ -133,5 +133,9 @@ public class KmlTrack {
 		}
 		
 		return null;
+	}
+	
+	public String getTrackName() {
+		return trackName;
 	}
 }

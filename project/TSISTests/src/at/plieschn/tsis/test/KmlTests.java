@@ -55,6 +55,8 @@ public class KmlTests extends ActivityInstrumentationTestCase2<MainActivity> {
 		KmlTrack track = new KmlTrack(locationVector, "TSIS Tracker", 1);
 		String kml = track.createKml();
 		
+		assertTrue("Is track name set correctly?", "TSIS Tracker".equals(track.getTrackName()));
+		
 		InputStream inputStream = getActivity().getResources().openRawResource(at.plieschn.tsis.R.raw.testlocation);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
