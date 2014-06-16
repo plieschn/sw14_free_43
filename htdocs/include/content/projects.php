@@ -145,11 +145,26 @@ class Projects extends Content {
   }
 
   private function getProjects() {
-    $query = 'select id, name from ' . $this->table_prefix_ . 'projects';
+    if(isset($_SESSION['username'])) {
+      $username = $_SESSION['username'];
+      $user_id = $this->getUserIdWithoutPassword($username);
+      if($user_id == null) {
+	return;
+      }
+    } else {
+      return;
+    }
+
+    $query = 'select id, name from ' . $this->table_prefix_ . 'projects where person_id = ?';
 
     $this->connect();
     $statement = $this->database->prepare($query);
     if(!$statement->prepareWorked()) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_INT, 'person_id', &$user_id)))) {
       print($this->database->getError());
       return;
     }
@@ -398,7 +413,19 @@ class Projects extends Content {
 
   private function enter($path_array, $baselink, $main_menu_items, $sub_menu_items, &$content_factory, &$smarty) {
     $objects = $this->getObjects();
-    $this->enterObjects($objects);
+    
+    if($objects == null) {
+      print("false");
+      return null;
+    }
+
+    if(!$this->enterObjects($objects)) {
+      print("false");
+      return null;
+    }
+
+    print("true");
+    return;
   }
 
   private function getObjects() {
@@ -406,6 +433,12 @@ class Projects extends Content {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $file_content = $_POST['file_content'];
+
+    $user_id = $this->getUserId($username, $password);
+
+    if($user_id == null) {
+      return null;
+    }
 
     $document = new DOMDocument();
     $document->loadXML($file_content);
@@ -452,19 +485,82 @@ class Projects extends Content {
 
     return array('project_objects' => $project_objects,
                  'track_objects' => $track_objects,
-                 'point_objects' => $point_objects);
+                 'point_objects' => $point_objects,
+		 'user_id' => $user_id);
+  }
+
+  private function getUserId($username, $password) {
+    $query = 'select id from ' . $this->table_prefix_ . 'persons where username = ? and password = PASSWORD(?)';
+
+    $this->connect();
+    $statement = $this->database->prepare($query);
+    if(!$statement->prepareWorked()) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_STRING, 'username', &$username),
+                                         array(ParamType::PARAM_TYPE_STRING, 'password', &$password)))) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->execute()) {
+      print($this->database->getError());
+      print($statement->getError());
+      return;
+    }
+
+    $id = NULL;
+    $result = $statement->bindResults(array(&$id));
+    if($statement->fetch()) {
+      return (intval($id));
+    } else {
+      return null;
+    }
+  }
+
+  private function getUserIdWithoutPassword($username) {
+    $query = 'select id from ' . $this->table_prefix_ . 'persons where username = ?';
+
+    $this->connect();
+    $statement = $this->database->prepare($query);
+    if(!$statement->prepareWorked()) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_STRING, 'username', &$username)))) {
+      print($this->database->getError());
+      return;
+    }
+
+    if(!$statement->execute()) {
+      print($this->database->getError());
+      print($statement->getError());
+      return;
+    }
+
+    $id = NULL;
+    $result = $statement->bindResults(array(&$id));
+    if($statement->fetch()) {
+      return (intval($id));
+    } else {
+      return null;
+    }
   }
 
   private function enterObjects($objects) {
     $projects = $objects['project_objects'];
     $tracks = $objects['track_objects'];
     $points = $objects['point_objects'];
+    $user_id = $objects['user_id'];
 
     $this->begin();
 
     foreach($projects as $project) {
       if(!$this->projectExists($project)) {
-        if(!$this->enterProject($project)) {
+        if(!$this->enterProject($project, $user_id)) {
           return false;
         }
       } else {
@@ -474,7 +570,7 @@ class Projects extends Content {
 
     $tracks_existed = array();
     foreach($tracks as $track) {
-      if(!$this->trackExists($track)) {
+      if(!$this->trackExists($project, $track)) {
         if(!$this->enterTrack($track)) {
           return false;
         }
@@ -555,8 +651,8 @@ class Projects extends Content {
   }
 
 
-  private function trackExists($track) {
-    $query = 'select count(*) as amount from ' . $this->table_prefix_ . 'tracks where number = ?';
+  private function trackExists($project, $track) {
+    $query = 'select count(*) as amount from ' . $this->table_prefix_ . 'tracks where number = ? and project_id = ?';
 
     $this->connect();
     $statement = $this->database->prepare($query);
@@ -566,7 +662,9 @@ class Projects extends Content {
     }
 
     $number = $track->getNumber();
-    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_INT, 'number', &$number)))) {
+    $project_id = $project->getId();
+    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_INT, 'number', &$number),
+					 array(ParamType::PARAM_TYPE_INT, 'project_id', &$project_id)))) {
       print($this->database->getError());
       return;
     }
@@ -584,8 +682,8 @@ class Projects extends Content {
     return ($amount == 1);
   }
 
-  private function enterProject(&$project) {
-    $query = 'insert into ' . $this->table_prefix_ . 'projects (name) values (?)';
+  private function enterProject(&$project, $user_id) {
+    $query = 'insert into ' . $this->table_prefix_ . 'projects (name, person_id) values (?, ?)';
 
     $this->connect();
     $statement = $this->database->prepare($query);
@@ -595,7 +693,8 @@ class Projects extends Content {
     }
 
     $name = $project->getName();
-    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_STRING, 'name', &$name)))) {
+    if(!$statement->bindParameters(array(array(ParamType::PARAM_TYPE_STRING, 'name', &$name),
+					 array(ParamType::PARAM_TYPE_INT, 'person_id', &$user_id)))) {
       print($this->database->getError());
       return false;
     }
