@@ -52,7 +52,7 @@ public class KmlTests extends ActivityInstrumentationTestCase2<MainActivity> {
 		locationVector.add(locationB);
 		locationVector.add(locationC);
 		
-		KmlTrack track = new KmlTrack(locationVector, 1);
+		KmlTrack track = new KmlTrack(locationVector, "TSIS Tracker", 1);
 		String kml = track.createKml();
 		
 		InputStream inputStream = getActivity().getResources().openRawResource(at.plieschn.tsis.R.raw.testlocation);
@@ -67,16 +67,16 @@ public class KmlTests extends ActivityInstrumentationTestCase2<MainActivity> {
             
             String testKml = outputStream.toString();
             
-/*            int length = result.length() < kml.length() ? result.length() : kml.length(); 
-            Log.d("kml", "string lengths: "+ result.length() + " " + kml.length());
+            int length = testKml.length() < kml.length() ? testKml.length() : kml.length(); 
+            Log.d("kml", "string lengths: "+ testKml.length() + " " + kml.length());
             for(int i = 0; i < length; ++i)
             {
-            	if(result.charAt(i) != kml.charAt(i)) {
-            		Log.d("kml", "wrong char at "+i+" expacted "+kml.charAt(i)+ " but was " + result.charAt(i));
+            	if(testKml.charAt(i) != kml.charAt(i)) {
+            		Log.d("kml", "wrong char at "+i+" expacted "+kml.charAt(i)+ " but was " + testKml.charAt(i));
             		break;
             	}
             }
-*/            
+            
             outputStream.close();
             inputStream.close();
             
